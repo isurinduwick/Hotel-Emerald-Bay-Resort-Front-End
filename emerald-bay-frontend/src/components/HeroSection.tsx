@@ -3,9 +3,9 @@
 const NAV_ITEMS = ["ROOMS & SUITES", "SERVICES", "TOURS", "PACKAGES", "GALLERY"];
 
 const IMAGE_FRAMES = [
-  { src: "/img1.jpg", rightPct: "57.8%", order: 1 },
-  { src: "/img2.jpg", rightPct: "42.2%", order: 2 },
-  { src: "/img3.jpg", rightPct: "26.6%", order: 3 },
+  { src: "/istimg.jpg", rightPct: "57.8%", order: 1 },
+  { src: "/2ndimg.jpg", rightPct: "42.2%", order: 2 },
+  { src: "/3rdimg.jpg", rightPct: "26.6%", order: 3 },
 ];
 
 export default function HeroSection() {
@@ -140,9 +140,9 @@ export default function HeroSection() {
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          gap: "clamp(8px, 1.5vw, 24px)",
-          padding: "0 clamp(16px, 4vw, 80px)",
-          marginTop: "calc(-1 * clamp(80px, 12vw, 130px))",
+          gap: "clamp(4px, 0.8vw, 12px)",
+          padding: "0 clamp(8px, 2vw, 40px)",
+          marginTop: "calc(-1 * clamp(50px, 7vw, 80px))",
           zIndex: 1,
           boxSizing: "border-box",
         }}
@@ -153,7 +153,7 @@ export default function HeroSection() {
             style={{
               boxSizing: "border-box",
               flex: "1 1 0",
-              maxWidth: "320px",
+              maxWidth: "240px",
               aspectRatio: "288 / 260",
               backgroundImage: `url(${src})`,
               backgroundSize: "cover",
