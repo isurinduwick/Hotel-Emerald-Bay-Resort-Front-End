@@ -114,9 +114,19 @@ export default function HeroSection() {
             zIndex: 5,
           }}
         >
+          {/* Logo above headline */}
+          <img
+            src="/logo.png"
+            alt="Emerald Bay Resort"
+            style={{
+              display: "block",
+              width: "clamp(190px, 40vw, 210px)",
+              marginBottom: "15px",
+            }}
+          />
           <h1
             style={{
-              fontFamily: "helvetica, 'Arial Rounded MT Bold'",
+              fontFamily: "Georgia, 'Georgia'",
               fontSize: "clamp(35px, 3.1vw, 45px)",
               fontWeight: "700",
               fontStyle: "italic",
