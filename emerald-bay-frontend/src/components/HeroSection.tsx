@@ -109,19 +109,19 @@ export default function HeroSection() {
         <div
           style={{
             position: "absolute",
-            bottom: "90px",
-            left: "88px",
+            bottom: "170px",
+            left: "48px",
             zIndex: 5,
           }}
         >
           <h1
             style={{
-              fontFamily: "'Times New Roman', Times, serif",
-              fontSize: "52px",
+              fontFamily: "helvetica, 'Arial Rounded MT Bold'",
+              fontSize: "clamp(35px, 3.1vw, 45px)",
               fontWeight: "700",
               fontStyle: "italic",
               color: "#ffffff",
-              lineHeight: "1.22",
+              lineHeight: "1.6",
               margin: 0,
               textShadow: "0 2px 12px rgba(0,0,0,0.45)",
             }}
