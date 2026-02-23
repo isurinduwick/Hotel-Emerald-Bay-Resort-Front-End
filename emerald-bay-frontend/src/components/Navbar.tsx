@@ -39,45 +39,37 @@ export default function Navbar() {
           paddingBottom: "2px",
         }}
       >
-        {/* Lotus SVG */}
-        <svg
-          width="48"
-          height="54"
-          viewBox="0 0 48 54"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Stem */}
-          <line x1="24" y1="54" x2="24" y2="34" stroke="#B39977" strokeWidth="1.2" />
-          {/* Leaves on stem */}
-          <path d="M24 44 Q18 40 15 34 Q20 37 24 44Z" fill="#B39977" />
-          <path d="M24 44 Q30 40 33 34 Q28 37 24 44Z" fill="#B39977" />
-          {/* Outer petals */}
-          <path d="M24 34 Q14 28 12 16 Q20 24 24 34Z" fill="#B39977" />
-          <path d="M24 34 Q34 28 36 16 Q28 24 24 34Z" fill="#B39977" />
-          <path d="M24 34 Q8 22 8 8 Q18 18 24 34Z" fill="#C4A882" opacity="0.8" />
-          <path d="M24 34 Q40 22 40 8 Q30 18 24 34Z" fill="#C4A882" opacity="0.8" />
-          {/* Inner petals */}
-          <path d="M24 30 Q18 20 20 10 Q23 20 24 30Z" fill="#B39977" />
-          <path d="M24 30 Q30 20 28 10 Q25 20 24 30Z" fill="#B39977" />
-          {/* Center petal */}
-          <path d="M24 28 Q21 16 24 8 Q27 16 24 28Z" fill="#9A7D5A" />
-          {/* Top flourish */}
-          <path d="M24 8 Q20 4 18 0 Q22 4 24 8Z" fill="#B39977" />
-          <path d="M24 8 Q28 4 30 0 Q26 4 24 8Z" fill="#B39977" />
-        </svg>
+        {/* Logo Image */}
+        <img
+          src="/dd1ad1fffc0272ff00b890bd6208b12e2aa7c2df.png"
+          alt="Emerald Bay Logo"
+          style={{ width: "70px", height: "86px", objectFit: "contain", position: "relative", top: "-10px", right: "25px" }}
+        />
 
         {/* Brand text */}
-        <div className="flex flex-col justify-center leading-tight ml-1">
+        <div className="flex flex-col items-center justify-center leading-none" style={{ position: "relative", right: "20px" }}>
           <span
-            className="font-semibold tracking-widest uppercase"
-            style={{ fontSize: "13px", color: "#6B5230", letterSpacing: "0.18em" }}
+            style={{
+              fontFamily: "var(--font-cinzel), 'Trajan Pro', serif",
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#1a1a1a",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+            }}
           >
             Emerald Bay
           </span>
           <span
-            className="tracking-widest uppercase"
-            style={{ fontSize: "8px", color: "#9A7D5A", letterSpacing: "0.3em" }}
+            style={{
+              fontFamily: "var(--font-cinzel), 'Trajan Pro', serif",
+              fontSize: "11px",
+              fontWeight: "400",
+              color: "#8a8a8a",
+              letterSpacing: "0.45em",
+              textTransform: "uppercase",
+              marginTop: "2px",
+            }}
           >
             Resort
           </span>
