@@ -1,5 +1,10 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import WelcomeSection from "@/components/WelcomeSection";
+import ServiceSection from "@/components/ServiceSection";
+
+
+
 
 export default function Home() {
   return (
@@ -8,6 +13,8 @@ export default function Home() {
       <main className="flex flex-1 w-full flex-col">
         <HeroSection />
       </main>
+      <WelcomeSection/>
+      <ServiceSection/>
     </div>
   );
 }
