@@ -1,9 +1,9 @@
 export default function Navbar() {
   return (
     <nav
-      className="w-full flex items-center justify-between"
+      className="w-full flex items-center justify-between fixed top-0 left-0 z-50"
       style={{
-        height: "88px",
+        height: "60px",
         paddingTop: "16px",
         paddingRight: "88px",
         paddingBottom: "11px",
@@ -43,11 +43,11 @@ export default function Navbar() {
         <img
           src="/dd1ad1fffc0272ff00b890bd6208b12e2aa7c2df.png"
           alt="Emerald Bay Logo"
-          style={{ width: "70px", height: "86px", objectFit: "contain", position: "relative", top: "-10px", right: "25px" }}
+          style={{ width: "70px", height: "86px", objectFit: "contain", position: "relative", top: "-10px", right: "30px" }}
         />
 
         {/* Brand text */}
-        <div className="flex flex-col items-center justify-center leading-none" style={{ position: "relative", right: "20px" }}>
+        <div className="flex flex-col items-center justify-center leading-none" style={{ position: "relative", right: "32px" }}>
           <span
             style={{
               fontFamily: "var(--font-cinzel), 'Trajan Pro', serif",
@@ -80,14 +80,14 @@ export default function Navbar() {
       <button
         className="flex items-center justify-center gap-2 font-semibold text-white uppercase tracking-widest transition-opacity hover:opacity-85 cursor-pointer"
         style={{
-          width: "228px",
-          height: "45px",
+          width: "170px",
+          height: "30px",
           backgroundColor: "#B39977",
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
           borderBottomRightRadius: "10px",
           borderBottomLeftRadius: "0px",
-          fontSize: "13px",
+          fontSize: "10px",
           letterSpacing: "0.12em",
           border: "none",
         }}
@@ -95,7 +95,7 @@ export default function Navbar() {
         {/* Booking / door icon */}
         <svg
           width="18"
-          height="23"
+          height="19"
           viewBox="0 0 18 23"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
