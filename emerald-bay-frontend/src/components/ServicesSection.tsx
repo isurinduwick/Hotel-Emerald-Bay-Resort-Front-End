@@ -152,14 +152,14 @@ export default function ServicesSection() {
                       position: "absolute",
                       top: "6px",
                       right: "6px",
-                      background: "rgba(255,255,255,0.18)",
+                      background: "rgba(0,0,0,0.47)",
                       border: "1px solid rgba(255,255,255,0.3)",
                       borderRadius: "3px",
-                      color: "rgba(255,255,255,0.75)",
-                      fontSize: "9px",
+                      color: "rgba(255,255,255,0.45)",
+                      fontSize: "7px",
                       fontFamily: "'Libre Franklin', sans-serif",
                       letterSpacing: "0.05em",
-                      padding: "2px 5px",
+                      padding: "1px 4px",
                     }}
                   >
                     Coming soon
