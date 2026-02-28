@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import WelcomeSection from "@/components/WelcomeSection";
 import ServicesSection from "@/components/ServicesSection";
 import PerfectStaySection from "@/components/PerfectStaySection";
+import ToursGuideSection from "@/components/ToursGuideSection";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <WelcomeSection />
         <ServicesSection />
         <PerfectStaySection />
+        <ToursGuideSection />
       </main>
     </div>
   );
