@@ -226,7 +226,7 @@ export default function PerfectStaySection() {
           marginTop: "clamp(28px, 3.5vw, 44px)",
         }}
       >
-        Luxury, Comfort &amp; Tailor Made Services
+         {/*Luxury, Comfort &amp; Tailor Made Services*/}
       </p>
     </section>
   );
