@@ -6,6 +6,7 @@ import PerfectStaySection from "@/components/PerfectStaySection";
 import ToursGuideSection from "@/components/ToursGuideSection";
 import ServicesSection from "@/components/ServicesSection";
 import PackagesSection from "@/components/PackagesSection";
+import DiscoverBeautySection from "@/components/DiscoverBeautySection";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         <ServiceSectionNew/>
         <ToursGuideSection />
         <PackagesSection />
+        <DiscoverBeautySection />
       </main>
     </div>
   );
