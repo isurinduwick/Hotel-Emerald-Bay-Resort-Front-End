@@ -7,6 +7,8 @@ import ToursGuideSection from "@/components/ToursGuideSection";
 import ServicesSection from "@/components/ServicesSection";
 import PackagesSection from "@/components/PackagesSection";
 import DiscoverBeautySection from "@/components/DiscoverBeautySection";
+import DiscoverAwaitsSection from "@/components/DiscoverAwaitsSection";
+import LocationSection from "@/components/LocationSection";
 
 export default function Home() {
   return (
@@ -21,6 +23,8 @@ export default function Home() {
         <ToursGuideSection />
         <PackagesSection />
         <DiscoverBeautySection />
+        <DiscoverAwaitsSection />
+        <LocationSection />
       </main>
     </div>
   );
