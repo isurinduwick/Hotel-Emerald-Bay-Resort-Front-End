@@ -41,24 +41,21 @@ const FACILITIES = [
 const SERVICES = [
   {
     label: "Hotel Room Security",
-    description:
-      "Enhanced security for your comfort and peace of mind.",
+    description: "Enhanced security for your comfort and peace of mind.",
     icon: (
       <img src="/hotelroomsecurity.png" alt="Hotel Room Security" width={36} height={36} style={{ objectFit: "contain" }} />
     ),
   },
   {
     label: "Full Room Amenities",
-    description:
-      "Each room offers complete amenities designed for comfort and convenience.",
+    description: "Each room offers complete amenities designed for comfort and convenience.",
     icon: (
       <img src="/fullroom.png" alt="Full Room Amenities" width={36} height={36} style={{ objectFit: "contain" }} />
     ),
   },
   {
     label: "Comfortable Rooms",
-    description:
-      "A peaceful and comfortable space to unwind and rest.",
+    description: "A peaceful and comfortable space to unwind and rest.",
     icon: (
       <img src="/comfortablerooms.png" alt="Comfortable Rooms" width={36} height={36} style={{ objectFit: "contain" }} />
     ),
@@ -68,7 +65,81 @@ const SERVICES = [
 export default function ServicesSection() {
   return (
     <section style={{ width: "100%", overflow: "hidden" }}>
-      {/* ── Dark floral background block ── */}
+      <style>{`
+        .facilities-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: clamp(8px, 1.5vw, 16px);
+          margin-bottom: clamp(40px, 5vw, 64px);
+          width: 100%;
+          max-width: 900px;
+        }
+        .facility-card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: clamp(120px, 14vw, 160px);
+          padding: 22px 12px 18px;
+          background: rgba(255,255,255,0.08);
+          border: 1px solid #B39977;
+          backdrop-filter: blur(6px);
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+        .services-cards-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: clamp(16px, 2.5vw, 32px);
+          max-width: 1100px;
+          margin: 0 auto;
+          transform: translateY(-145px);
+        }
+        .service-card {
+          flex: 1 1 260px;
+          max-width: 320px;
+        }
+        @media (max-width: 768px) {
+          .facility-card {
+            width: calc(50% - 10px) !important;
+            padding: 16px 8px 14px !important;
+          }
+          .services-cards-row {
+            flex-direction: column !important;
+            align-items: center !important;
+            transform: translateY(-80px) !important;
+            gap: 16px !important;
+          }
+          .service-card {
+            max-width: 100% !important;
+            width: 100% !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .facility-card {
+            width: calc(50% - 8px) !important;
+            padding: 12px 6px 10px !important;
+          }
+          .facility-card img { width: 36px !important; height: 36px !important; }
+          .services-cards-row {
+            transform: translateY(-50px) !important;
+          }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .facility-card {
+            width: clamp(110px, 16vw, 150px) !important;
+          }
+          .services-cards-row {
+            transform: translateY(-100px) !important;
+          }
+        }
+      `}</style>
+
+      {/* Dark floral background block */}
       <div
         style={{
           position: "relative",
@@ -79,16 +150,9 @@ export default function ServicesSection() {
           backgroundColor: "#1a1006",
         }}
       >
-        {/* Dark overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(10, 7, 2, 0.72)",
-          }}
-        />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(10, 7, 2, 0.72)" }} />
 
-        {/* White downward triangle at the very top */}
+        {/* White triangle */}
         <div
           style={{
             position: "absolute",
@@ -112,40 +176,13 @@ export default function ServicesSection() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: "clamp(56px, 6vw, 90px) clamp(20px, 5vw, 80px) clamp(48px, 6vw, 80px)",
+            padding: "clamp(56px, 6vw, 90px) clamp(16px, 5vw, 80px) clamp(48px, 6vw, 80px)",
           }}
         >
-          {/* ── Facilities icon row ── */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "clamp(8px, 1.5vw, 16px)",
-              marginBottom: "clamp(40px, 5vw, 64px)",
-              width: "100%",
-              maxWidth: "900px",
-            }}
-          >
+          {/* Facilities */}
+          <div className="facilities-row">
             {FACILITIES.map((f) => (
-              <div
-                key={f.label}
-                style={{
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "12px",
-                  width: "clamp(120px, 14vw, 160px)",
-                  padding: "22px 12px 18px",
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid #B39977",
-                  backdropFilter: "blur(6px)",
-                  borderRadius: "4px",
-                  boxSizing: "border-box",
-                }}
-              >
+              <div key={f.label} className="facility-card">
                 {f.comingSoon && (
                   <span
                     style={{
@@ -171,7 +208,7 @@ export default function ServicesSection() {
                     color: "#fff",
                     fontFamily: "'Libre Franklin', sans-serif",
                     fontSize: "clamp(11px, 1.1vw, 13px)",
-                    fontWeight: "500",
+                    fontWeight: 500,
                     letterSpacing: "0.04em",
                     textAlign: "center",
                   }}
@@ -182,12 +219,12 @@ export default function ServicesSection() {
             ))}
           </div>
 
-          {/* ── Section label ── */}
+          {/* Label */}
           <p
             style={{
               fontFamily: "'Cinzel', 'Trajan Pro', serif",
               fontSize: "clamp(9px, 1vw, 12px)",
-              fontWeight: "600",
+              fontWeight: 600,
               letterSpacing: "0.22em",
               color: "#ba9e7a",
               textTransform: "uppercase",
@@ -198,12 +235,12 @@ export default function ServicesSection() {
             Our Hotel Facilities
           </p>
 
-          {/* ── Section heading ── */}
+          {/* Heading */}
           <h2
             style={{
               fontFamily: "DM Serif Display, serif",
-              fontSize: "clamp(28px, 4vw, 56px)",
-              fontWeight: "700",
+              fontSize: "clamp(24px, 4vw, 56px)",
+              fontWeight: 700,
               color: "#fff",
               margin: 0,
               textAlign: "center",
@@ -215,36 +252,25 @@ export default function ServicesSection() {
         </div>
       </div>
 
-      {/* ── Service cards block ── */}
+      {/* Service cards */}
       <div
         style={{
           width: "100%",
           backgroundColor: "#ffffff",
-          padding: "clamp(48px, 6vw, 80px) clamp(20px, 6vw, 100px)",
+          padding: "clamp(48px, 6vw, 80px) clamp(16px, 6vw, 100px)",
           boxSizing: "border-box",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "clamp(16px, 2.5vw, 32px)",
-            maxWidth: "1100px",
-            margin: "0 auto",
-            transform: "translateY(-145px)",
-          }}
-        >
+        <div className="services-cards-row">
           {SERVICES.map((s) => (
             <div
               key={s.label}
+              className="service-card"
               style={{
-                flex: "1 1 260px",
-                maxWidth: "320px",
                 backgroundColor: "#EDE6D9",
                 border: "1.5px solid #d9c9b0",
                 borderRadius: "0px",
-                padding: "clamp(28px, 3vw, 44px) clamp(20px, 2.5vw, 32px)",
+                padding: "clamp(24px, 3vw, 44px) clamp(16px, 2.5vw, 32px)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -254,7 +280,6 @@ export default function ServicesSection() {
                 outlineOffset: "-15px",
               }}
             >
-              {/* Icon circle */}
               <div
                 style={{
                   width: "72px",
@@ -269,13 +294,11 @@ export default function ServicesSection() {
               >
                 {s.icon}
               </div>
-
-              {/* Label */}
               <h3
                 style={{
                   fontFamily: "'Cinzel', 'Trajan Pro', serif",
                   fontSize: "clamp(11px, 1.1vw, 13px)",
-                  fontWeight: "700",
+                  fontWeight: 700,
                   letterSpacing: "0.16em",
                   color: "#2a2218",
                   textTransform: "uppercase",
@@ -285,15 +308,13 @@ export default function ServicesSection() {
               >
                 {s.label}
               </h3>
-
-              {/* Description */}
               <p
                 style={{
                   fontFamily: "'Libre Franklin', sans-serif",
                   fontSize: "clamp(13px, 1vw, 15px)",
-                  fontWeight: "400",
+                  fontWeight: 400,
                   color: "rgba(0,0,0,0.6)",
-                  lineHeight: "1.75",
+                  lineHeight: 1.75,
                   textAlign: "center",
                   margin: 0,
                 }}
