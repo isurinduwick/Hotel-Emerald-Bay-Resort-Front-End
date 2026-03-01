@@ -79,6 +79,8 @@ export default function HeroSection() {
                   padding: "0 22px",
                   opacity: 0.95,
                   transition: "opacity 0.2s",
+                  paddingLeft:"10px",
+                  paddingRight:"10px",
                 }}
                 onMouseEnter={(e) =>
                   ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.65")
@@ -172,6 +174,7 @@ export default function HeroSection() {
               border: "6px solid #EDE6D9",
             }}
           />
+          
         ))}
       </div>
     </section>
