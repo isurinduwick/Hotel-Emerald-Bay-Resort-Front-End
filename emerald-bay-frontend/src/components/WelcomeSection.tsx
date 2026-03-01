@@ -15,8 +15,8 @@ export default function WelcomeSection() {
               className="object-cover rounded-md shadow-lg"
             />
           </div>
-        </div>
 
+        </div>
         {/* Right Content */}
         <div>
           <h2 className="text-4xl font-serif font-semibold text-gray-900 leading-snug mb-6">
@@ -34,6 +34,8 @@ export default function WelcomeSection() {
             southern coast in style.
           </p>
         </div>
+
+        
 
       </div>
     </section>

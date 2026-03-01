@@ -3,7 +3,7 @@ export default function ServicesSection() {
     <section className="w-full">
 
       {/* ===== TOP DARK FACILITIES SECTION ===== */}
-      <div className="relative bg-[url('/service.png')] bg-cover bg-center py-24 pb-32">
+      <div className="relative bg-[url('/service.png')] bg-cover bg-center py-24 pb-48">
         
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/60"></div>
@@ -33,11 +33,11 @@ export default function ServicesSection() {
 
 
       {/* ===== BOTTOM SERVICE CARDS ===== */}
-      <div className="bg-white py-16 -mt-16">
-        <div className="max-w-6xl mx-auto px-6">
+      <div className="bg-white pt-16 pb-3 -mt-40">
+        <div className="max-w-5xl mx-auto px-6 mb-8">
           
           {/* Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid mb-30 md:grid-cols-3  gap-8">
           
           <ServiceCard 
             iconSrc="/security.png"
@@ -82,19 +82,21 @@ function Facility({ iconSrc, title }: { iconSrc: string; title: string }) {
 /* ===== SERVICE CARD ===== */
 function ServiceCard({ iconSrc, title, description }: { iconSrc: string; title: string; description: string }) {
   return (
-    <div className="bg-[#F5EFE6] p-10 border border-[#CBB89D] text-center relative shadow-sm">
-      
-      <div className="w-16 h-16 bg-[#B79A72] rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-        <img src={iconSrc} alt={title} className="w-8 h-8 object-contain" />
+    <div className="bg-[#F5EFE6] p-7 border border-[#CBB89D] text-center relative shadow-sm">
+      {/* Inner border frame */}
+      <div className="border border-[#CBB89D] p-7">
+        <div className="w-16 h-16 bg-[#B79A72] rounded-full flex items-center justify-center mx-auto mb-6 text-white">
+          <img src={iconSrc} alt={title} className="w-8 h-8 object-contain" />
+        </div>
+
+        <h3 className="font-bold text-xs tracking-[0.15em] mb-4 text-gray-900 uppercase">
+          {title}
+        </h3>
+
+        <p className="text-gray-600 text-sm leading-relaxed px-2">
+          {description}
+        </p>
       </div>
-
-      <h3 className="font-bold text-xs tracking-[0.15em] mb-4 text-gray-900 uppercase">
-        {title}
-      </h3>
-
-      <p className="text-gray-600 text-sm leading-relaxed px-2">
-        {description}
-      </p>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WelcomeSection from "@/components/WelcomeSection";
 import ServiceSection from "@/components/ServiceSection";
+import ServiceSectionNew from "@/components/ServiceSectionNew";
 
 
 
@@ -15,6 +16,7 @@ export default function Home() {
       </main>
       <WelcomeSection/>
       <ServiceSection/>
+      <ServiceSectionNew/>
     </div>
   );
 }

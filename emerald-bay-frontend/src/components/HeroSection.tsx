@@ -172,6 +172,7 @@ export default function HeroSection() {
               border: "6px solid #EDE6D9",
             }}
           />
+          
         ))}
       </div>
     </section>
