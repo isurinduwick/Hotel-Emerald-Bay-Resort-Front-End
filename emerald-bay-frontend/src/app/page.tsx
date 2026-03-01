@@ -1,17 +1,12 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WelcomeSection from "@/components/WelcomeSection";
-
 import ServiceSection from "@/components/ServiceSection";
 import ServiceSectionNew from "@/components/ServiceSectionNew";
-
-
-
-
 import PerfectStaySection from "@/components/PerfectStaySection";
 import ToursGuideSection from "@/components/ToursGuideSection";
 import ServicesSection from "@/components/ServiceSection";
-
+import PackagesSection from "@/components/PackagesSection";
 
 export default function Home() {
   return (
@@ -24,10 +19,8 @@ export default function Home() {
         <PerfectStaySection />
         <ServiceSectionNew/>
         <ToursGuideSection />
+        <PackagesSection />
       </main>
- 
-     
-      
     </div>
   );
 }
