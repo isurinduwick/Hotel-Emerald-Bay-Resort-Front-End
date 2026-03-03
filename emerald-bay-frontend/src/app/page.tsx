@@ -9,6 +9,7 @@ import PackagesSection from "@/components/PackagesSection";
 import DiscoverBeautySection from "@/components/DiscoverBeautySection";
 import DiscoverAwaitsSection from "@/components/DiscoverAwaitsSection";
 import LocationSection from "@/components/LocationSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <DiscoverAwaitsSection />
         <LocationSection />
       </main>
+      <Footer />
     </div>
   );
 }
