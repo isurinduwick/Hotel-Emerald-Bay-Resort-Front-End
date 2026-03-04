@@ -7,11 +7,46 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validateEmail = (email: string): boolean => {
+    if (!email) {
+      setEmailError("Email is required");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address");
+      return false;
+    }
+    setEmailError("");
+    return true;
+  };
+
+  const validatePassword = (password: string): boolean => {
+    if (!password) {
+      setPasswordError("Password is required");
+      return false;
+    }
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add login logic here
-    console.log("Login attempt:", { email, rememberMe });
+    
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+    
+    if (isEmailValid && isPasswordValid) {
+      // Add login logic here
+      console.log("Login attempt:", { email, rememberMe });
+    }
   };
 
   return (
@@ -110,16 +145,25 @@ export default function AdminLogin() {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError("");
+                  }}
+                  onBlur={() => validateEmail(email)}
                   placeholder="admin@emeraldbay.com"
                   className="w-full pl-12 pr-4 py-3 rounded-lg text-sm outline-none transition-all focus:ring-2 focus:ring-#B39977"
                   style={{
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    border: "#B39977",
+                    border: emailError ? "1px solid #EF4444" : "1px solid #B39977",
                     color: "#EDE6D9"
                   }}
                 />
               </div>
+              {emailError && (
+                <p className="mt-1 text-xs" style={{ color: "#EF4444" }}>
+                  {emailError}
+                </p>
+              )}
             </div>
 
             {/* Password Input */}
@@ -150,12 +194,16 @@ export default function AdminLogin() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (passwordError) setPasswordError("");
+                  }}
+                  onBlur={() => validatePassword(password)}
                   placeholder="••••••••••"
                   className="w-full pl-12 pr-12 py-3 rounded-lg text-sm outline-none transition-all focus:ring-2 focus:ring-#B39977 "
                   style={{
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    border: " #B39977",
+                    border: passwordError ? "1px solid #EF4444" : "1px solid #B39977",
                     color: "#EDE6D9"
                   }}
                 />
@@ -191,6 +239,11 @@ export default function AdminLogin() {
                   )}
                 </button>
               </div>
+              {passwordError && (
+                <p className="mt-1 text-xs" style={{ color: "#EF4444" }}>
+                  {passwordError}
+                </p>
+              )}
             </div>
 
             {/* Remember Me & Forgot Password */}
