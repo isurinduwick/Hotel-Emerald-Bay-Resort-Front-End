@@ -77,6 +77,20 @@ export default function DiscoverAwaitsSection() {
         @media (max-width: 480px) {
           .awaits-grid-bottom {
             grid-template-columns: 1fr !important;
+
+          }
+          .awaits-header-row {
+            margin: 0 auto -420px !important;
+            gap: 0px !important;
+          }
+          .awaits-header-right p {
+            margin-top: -660px !important;
+          }
+          .awaits-grid-top {
+            gap: 10px !important;
+          }
+          .awaits-grid-bottom {
+            gap: 10px !important;
           }
           .awaits-top-card { aspect-ratio: 16 / 8 !important; }
           .awaits-bottom-card { aspect-ratio: 16 / 8 !important; }

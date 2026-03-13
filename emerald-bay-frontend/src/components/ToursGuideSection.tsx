@@ -52,20 +52,12 @@ export default function ToursGuideSection() {
         }
         .tours-slider {
           flex: 1 1 0;
-          width: 100%;
-          min-width: 0;
           max-width: 850px;
           position: relative;
           border-radius: 12px;
           overflow: hidden;
           border: 6px solid #e8ddd0;
           box-sizing: border-box;
-        }
-        .tours-slider-media {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 16 / 10;
-          min-height: 220px;
         }
         .tours-side-thumbs {
           display: flex;
@@ -80,57 +72,99 @@ export default function ToursGuideSection() {
           overflow: hidden;
           border: 4px solid #e8ddd0;
           box-sizing: border-box;
+          min-height: 80px;
         }
-        .tours-main-image {
-          position: absolute;
-          inset: 0;
+        .tours-thumb img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center;
           display: block;
-          transition: opacity 0.4s ease;
+          min-height: 80px;
         }
+
+        /* Tablet */
         @media (max-width: 768px) {
           .tours-header-row {
-            display: block !important;
-            margin-bottom: 20px !important;
+            flex-direction: column !important;
+            gap: 12px !important;
           }
-          .tours-header-desc {
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+          .tours-header-row {
+            gap: 0px !important;
+          }
+          .tours-header-row p {
             text-align: left !important;
             max-width: 100% !important;
-            margin-top: 10px !important;
+            margin-top: -190px !important;
           }
           .tours-content-row {
             flex-direction: column !important;
-            gap: 10px !important;
+            flex-wrap: wrap !important;
           }
           .tours-side-thumbs {
-            flex-direction: column !important;
+            flex-direction: row !important;
             width: 100% !important;
             gap: 8px !important;
           }
-          .tours-thumb {
-            width: 100% !important;
-            min-height: 120px !important;
-          }
           .tours-slider {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
             border-width: 4px !important;
           }
-          .tours-slider-media {
-            min-height: 200px;
+          .tours-thumb {
+            flex: 1 1 0;
+            min-height: 100px !important;
+            height: 100px !important;
+          }
+          .tours-thumb img {
+            min-height: 100px !important;
+            height: 100px !important;
           }
         }
+
+        /* Mobile */
         @media (max-width: 480px) {
-          .tours-slider {
-            border-width: 3px !important;
+          .tours-header-row {
+            margin-bottom: 0 !important;
+          }
+          .tours-content-row {
+            margin-top: -170px !important;
+          }
+           
+          .tours-side-thumbs {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            gap: 6px !important;
           }
           .tours-thumb {
-            min-height: 110px !important;
+            flex: 1 1 0;
+            min-height: 80px !important;
+            height: 80px !important;
+            border-width: 2px !important;
+            border-radius: 8px !important;
           }
-          .tours-slider-media {
-            min-height: 180px;
+          .tours-thumb img {
+            min-height: 80px !important;
+            height: 80px !important;
           }
+          .tours-slider {
+            border-width: 3px !important;
+            max-width: 100% !important;
+            flex: 0 0 100% !important;
+            height: auto !important;
+          }
+          .tours-slider-inner {
+            aspect-ratio: auto !important;
+            height: 200px !important;
+            max-height: 200px !important;
+            width: 100% !important;
+          }
+
+         
         }
       `}</style>
 
@@ -168,7 +202,6 @@ export default function ToursGuideSection() {
           <div style={{ width: "48px", height: "3px", backgroundColor: "#ba9e7a", borderRadius: "2px" }} />
         </div>
         <p
-          className="tours-header-desc"
           style={{
             flex: "1 1 300px",
             maxWidth: "420px",
@@ -188,12 +221,21 @@ export default function ToursGuideSection() {
       <div className="tours-content-row">
         {/* Slider */}
         <div className="tours-slider">
-          <div className="tours-slider-media">
+          <div className="tours-slider-inner" style={{ position: "relative", width: "100%", aspectRatio: "16/10" }}>
             <img
               key={tour.id}
               src={tour.image}
               alt={tour.name}
-              className="tours-main-image"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+                transition: "opacity 0.4s ease",
+              }}
             />
 
             {/* Overlay card */}
@@ -285,13 +327,6 @@ export default function ToursGuideSection() {
               <img
                 src={img.src}
                 alt={img.alt}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  minHeight: "clamp(80px, 10vw, 120px)",
-                  objectFit: "cover",
-                  display: "block",
-                }}
               />
             </div>
           ))}
