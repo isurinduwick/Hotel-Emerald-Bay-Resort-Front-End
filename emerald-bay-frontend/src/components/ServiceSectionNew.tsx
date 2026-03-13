@@ -40,7 +40,7 @@ function ServiceCard({
   subtitle: string;
 }) {
   return (
-    <div className="relative group cursor-pointer max-w-xs sm:max-w-none mx-10 w-full">
+    <div className="relative group cursor-pointer max-w-xs sm:max-w-none mx-15 w-full">
       <div className="relative overflow-hidden rounded-t-full aspect-3/3 sm:aspect-3/4 max-h-65 sm:max-h-none ">
         <img
           src={imageSrc}
