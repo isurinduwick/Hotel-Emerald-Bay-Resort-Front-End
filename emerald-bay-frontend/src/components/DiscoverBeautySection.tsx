@@ -12,12 +12,76 @@ export default function DiscoverBeautySection() {
         boxSizing: "border-box",
       }}
     >
-      {/* ── Heading ── */}
+      <style>{`
+        .discover-beauty-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
+          gap: 16px;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 clamp(16px, 3vw, 40px);
+          aspect-ratio: 16 / 9;
+        }
+        .discover-beauty-grid .cell-1 { grid-column: 1 / 3; grid-row: 1 / 2; }
+        .discover-beauty-grid .cell-2 { grid-column: 3 / 4; grid-row: 1 / 3; }
+        .discover-beauty-grid .cell-3 { grid-column: 1 / 2; grid-row: 2 / 3; }
+        .discover-beauty-grid .cell-4 { grid-column: 2 / 3; grid-row: 2 / 3; }
+        .discover-more-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 14px;
+          padding: 10px 20px;
+          background-color: rgba(0, 0, 0, 0.36);
+          backdrop-filter: blur(4px);
+          color: #FFFFFF;
+          font-family: 'Libre Franklin', sans-serif;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 2.5px;
+          text-decoration: none;
+          text-transform: uppercase;
+          border: 4px solid #B39977;
+          border-radius: 0;
+          transition: background 0.2s;
+        }
+        @media (max-width: 768px) {
+          .discover-beauty-grid {
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: auto auto auto !important;
+            aspect-ratio: unset !important;
+            gap: 10px !important;
+          }
+          .discover-beauty-grid .cell-1 { grid-column: 1 / -1 !important; grid-row: 1 / 2 !important; min-height: 180px; }
+          .discover-beauty-grid .cell-2 { grid-column: 1 / -1 !important; grid-row: 2 / 3 !important; min-height: 220px; }
+          .discover-beauty-grid .cell-3 { grid-column: 1 / 2 !important; grid-row: 3 / 4 !important; min-height: 160px; }
+          .discover-beauty-grid .cell-4 { grid-column: 2 / 3 !important; grid-row: 3 / 4 !important; min-height: 160px; }
+          .discover-more-btn {
+            padding: 8px 14px !important;
+            font-size: 9px !important;
+            letter-spacing: 1.5px !important;
+            border-width: 3px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .discover-beauty-grid {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto auto auto auto !important;
+            gap: 8px !important;
+          }
+          .discover-beauty-grid .cell-1 { grid-column: 1 !important; grid-row: 1 !important; min-height: 160px; }
+          .discover-beauty-grid .cell-2 { grid-column: 1 !important; grid-row: 2 !important; min-height: 200px; }
+          .discover-beauty-grid .cell-3 { grid-column: 1 !important; grid-row: 3 !important; min-height: 160px; }
+          .discover-beauty-grid .cell-4 { grid-column: 1 !important; grid-row: 4 !important; min-height: 160px; }
+        }
+      `}</style>
+
+      {/* Heading */}
       <div style={{ textAlign: "center", padding: "0 24px", marginBottom: "clamp(32px, 4vw, 56px)" }}>
         <h2
           style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: "clamp(28px, 4vw, 48px)",
+            fontSize: "clamp(24px, 4vw, 48px)",
             fontWeight: 800,
             color: "#1a1208",
             margin: "0 0 16px",
@@ -28,22 +92,11 @@ export default function DiscoverBeautySection() {
           <br />
           Perfect Stay
         </h2>
-
-        {/* Decorative line */}
-        <div
-          style={{
-            width: "48px",
-            height: "3px",
-            background: "#ba9e7a",
-            borderRadius: "2px",
-            margin: "0 auto 20px",
-          }}
-        />
-
+        <div style={{ width: "48px", height: "3px", background: "#ba9e7a", borderRadius: "2px", margin: "0 auto 20px" }} />
         <p
           style={{
             fontFamily: "Libre Franklin",
-            fontSize: "clamp(13px, 1.1vw, 15px)",
+            fontSize: "clamp(12px, 1.1vw, 15px)",
             color: "#7a6d5e",
             maxWidth: "440px",
             margin: "0 auto",
@@ -56,59 +109,18 @@ export default function DiscoverBeautySection() {
         </p>
       </div>
 
-      {/* ── Image Grid ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gridTemplateRows: "1fr 1fr",
-          gap: "16px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 clamp(16px, 3vw, 40px)",
-          aspectRatio: "16 / 9",
-        }}
-      >
-        {/* Top-left: Pool panorama (spans 2 columns) */}
-        <div
-          style={{
-            gridColumn: "1 / 3",
-            gridRow: "1 / 2",
-            position: "relative",
-            borderRadius: "0",
-            overflow: "hidden",
-            border: "4px solid #EDE6D9",
-          }}
-        >
-          <Image
-            src="/discoverimg1.jpg"
-            alt="Rooftop pool overlooking the bay"
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 768px) 100vw, 60vw"
-          />
+      {/* Image Grid */}
+      <div className="discover-beauty-grid">
+        {/* Top-left: Pool (spans 2 cols) */}
+        <div className="cell-1" style={{ position: "relative", overflow: "hidden", border: "4px solid #EDE6D9" }}>
+          <Image src="/discoverimg1.jpg" alt="Rooftop pool overlooking the bay" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 60vw" />
         </div>
 
-        {/* Right: Couple on couch (spans 2 rows) */}
-        <div
-          style={{
-            gridColumn: "3 / 4",
-            gridRow: "1 / 3",
-            position: "relative",
-            borderRadius: "0",
-            overflow: "hidden",
-            border: "4px solid #EDE6D9",
-          }}
-        >
-          <Image
-            src="/discoverimg4.jpg"
-            alt="Guests relaxing in the lobby"
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 768px) 100vw, 35vw"
-          />
+        {/* Right: Couple (spans 2 rows) */}
+        <div className="cell-2" style={{ position: "relative", overflow: "hidden", border: "4px solid #EDE6D9" }}>
+          <Image src="/discoverimg4.jpg" alt="Guests relaxing in the lobby" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 35vw" />
 
-          {/* Navigation circle arrow */}
+          {/* Arrow button */}
           <button
             aria-label="Next image"
             style={{
@@ -120,13 +132,12 @@ export default function DiscoverBeautySection() {
               height: "44px",
               borderRadius: "50%",
               border: "2px solid rgba(255,255,255,0.8)",
-              background: "rgba(0, 0, 0, 0.25)",
+              background: "rgba(0,0,0,0.25)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
               color: "#fff",
-              fontSize: "18px",
               transition: "background 0.2s",
               backdropFilter: "blur(2px)",
             }}
@@ -138,34 +149,11 @@ export default function DiscoverBeautySection() {
             </svg>
           </button>
 
-          {/* DISCOVER MORE button */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "24px",
-              left: "24px",
-            }}
-          >
+          {/* Discover More */}
+          <div style={{ position: "absolute", bottom: "clamp(12px, 2vw, 24px)", left: "clamp(12px, 2vw, 24px)" }}>
             <a
               href="#"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "14px",
-                padding: "12px 30px",
-                backgroundColor: "rgba(0, 0, 0, 0.36)",
-                backdropFilter: "blur(4px)",
-                color: "#FFFFFF",
-                fontFamily: "'Libre Franklin', sans-serif",
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "2.5px",
-                textDecoration: "none",
-                textTransform: "uppercase",
-                border: "5px solid #B39977",
-                borderRadius: "0",
-                transition: "background 0.2s",
-              }}
+              className="discover-more-btn"
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(0, 0, 0, 0.5)")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(0, 0, 0, 0.36)")}
             >
@@ -177,57 +165,16 @@ export default function DiscoverBeautySection() {
           </div>
         </div>
 
-        {/* Bottom-left: Couple in pool */}
-        <div
-          style={{
-            gridColumn: "1 / 2",
-            gridRow: "2 / 3",
-            position: "relative",
-            borderRadius: "0",
-            overflow: "hidden",
-            border: "4px solid #EDE6D9",
-          }}
-        >
-          <Image
-            src="/discoverimg2.png"
-            alt="Guests enjoying drinks in the pool"
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 768px) 100vw, 30vw"
-          />
+        {/* Bottom-left */}
+        <div className="cell-3" style={{ position: "relative", overflow: "hidden", border: "4px solid #EDE6D9" }}>
+          <Image src="/discoverimg2.png" alt="Guests enjoying drinks in the pool" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 30vw" />
         </div>
 
-        {/* Bottom-center: Restaurant interior */}
-        <div
-          style={{
-            gridColumn: "2 / 3",
-            gridRow: "2 / 3",
-            position: "relative",
-            borderRadius: "0",
-            overflow: "hidden",
-            border: "4px solid #EDE6D9",
-          }}
-        >
-          <Image
-            src="/discoverimg3.jpg"
-            alt="Hotel restaurant and lounge"
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 768px) 100vw, 30vw"
-          />
+        {/* Bottom-center */}
+        <div className="cell-4" style={{ position: "relative", overflow: "hidden", border: "4px solid #EDE6D9" }}>
+          <Image src="/discoverimg3.jpg" alt="Hotel restaurant and lounge" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 30vw" />
         </div>
       </div>
-
-      {/* ── Responsive overrides ── */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          section > div:last-of-type {
-            grid-template-columns: 1fr 1fr !important;
-            grid-template-rows: auto auto auto !important;
-            aspect-ratio: unset !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

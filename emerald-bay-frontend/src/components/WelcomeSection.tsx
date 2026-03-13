@@ -6,21 +6,59 @@ export default function WelcomeSection() {
       style={{
         width: "100%",
         backgroundColor: "#fff",
-        padding: "clamp(24px, 3vw, 48px) clamp(24px, 6vw, 96px) clamp(48px, 6vw, 88px)",
+        padding: "clamp(24px, 3vw, 48px) clamp(16px, 6vw, 96px) clamp(48px, 6vw, 88px)",
         boxSizing: "border-box",
       }}
     >
+      <style>{`
+        .welcome-layout {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: clamp(28px, 5vw, 72px);
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .welcome-img-wrap {
+          flex: 1 1 320px;
+          max-width: 480px;
+        }
+        .welcome-text-wrap {
+          flex: 1 1 320px;
+          max-width: 600px;
+        }
+        @media (max-width: 768px) {
+          .welcome-layout {
+            flex-direction: column !important;
+            gap: 24px !important;
+            align-items: stretch !important;
+          }
+          .welcome-img-wrap {
+            max-width: 100% !important;
+          }
+          .welcome-text-wrap {
+            max-width: 100% !important;
+            text-align: center;
+          }
+        }
+        @media (max-width: 480px) {
+          .welcome-img-wrap img {
+            height: 220px !important;
+            border-width: 6px !important;
+          }
+        }
+      `}</style>
+
       {/* Label */}
       <p
         style={{
           textAlign: "center",
           fontFamily: "'Cinzel', 'Trajan Pro', serif",
           fontSize: "clamp(10px, 1.1vw, 13px)",
-          fontWeight: "600",
+          fontWeight: 600,
           letterSpacing: "0.22em",
           color: "#ba9e7a",
           textTransform: "uppercase",
-          marginBottom: "clamp(32px, 4vw, 52px)",
           margin: "0 0 clamp(32px, 4vw, 52px)",
         }}
       >
@@ -28,29 +66,15 @@ export default function WelcomeSection() {
       </p>
 
       {/* Two-column layout */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: "clamp(28px, 5vw, 72px)",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <div className="welcome-layout">
         {/* Left — image */}
-        <div
-          style={{
-            flex: "1 1 320px",
-            maxWidth: "480px",
-          }}
-        >
+        <div className="welcome-img-wrap">
           <img
             src="/welcomeimg.jpg"
             alt="Hotel staff welcoming guests at Emerald Bay Resort"
             style={{
               width: "100%",
-              height: "clamp(280px, 35vw, 440px)",
+              height: "clamp(220px, 35vw, 440px)",
               objectFit: "cover",
               display: "block",
               borderRadius: "4px",
@@ -61,20 +85,15 @@ export default function WelcomeSection() {
         </div>
 
         {/* Right — text */}
-        <div
-          style={{
-            flex: "1 1 320px",
-            maxWidth: "600px",
-          }}
-        >
+        <div className="welcome-text-wrap">
           <h2
             style={{
               fontFamily: "DM Serif Display",
-              fontSize: "clamp(26px, 3.2vw, 44px)",
-              fontWeight: "700",
+              fontSize: "clamp(22px, 3.2vw, 44px)",
+              fontWeight: 700,
               color: "#1a1a1a",
-              lineHeight: "1.25",
-              margin: "0 0 clamp(18px, 2.5vw, 28px)",
+              lineHeight: 1.25,
+              margin: "0 0 clamp(14px, 2.5vw, 28px)",
             }}
           >
             Welcome To Our Hotel Emerald Bay Resort
@@ -82,10 +101,10 @@ export default function WelcomeSection() {
           <p
             style={{
               fontFamily: "Libre Franklin",
-              fontSize: "clamp(14px, 1.15vw, 16px)",
-              fontWeight: "400",
+              fontSize: "clamp(13px, 1.15vw, 16px)",
+              fontWeight: 400,
               color: "rgba(0, 0, 0, 0.61)",
-              lineHeight: "1.85",
+              lineHeight: 1.85,
               margin: 0,
             }}
           >
