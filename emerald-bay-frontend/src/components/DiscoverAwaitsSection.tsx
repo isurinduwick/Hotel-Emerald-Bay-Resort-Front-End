@@ -59,7 +59,7 @@ export default function DiscoverAwaitsSection() {
         @media (max-width: 768px) {
           .awaits-header-row {
             flex-direction: column !important;
-            gap: 16px !important;
+            gap: 10px !important;
           }
           .awaits-header-right {
             justify-content: flex-start !important;

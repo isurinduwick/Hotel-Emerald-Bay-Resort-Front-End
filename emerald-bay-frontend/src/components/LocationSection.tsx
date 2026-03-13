@@ -127,7 +127,7 @@ export default function LocationSection() {
 
         {/* Content */}
         <div style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 clamp(16px, 3vw, 40px)" }}>
+          <div style={{ maxHeight:"1300px", maxWidth: "1400px", margin: "15px auto", padding: "0 clamp(16px, 3vw, 40px)" }}>
             <div className="location-card">
               {/* Text */}
               <div className="location-text">
