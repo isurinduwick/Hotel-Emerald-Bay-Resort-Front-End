@@ -40,14 +40,14 @@ function ServiceCard({
   subtitle: string;
 }) {
   return (
-    <div className="relative group cursor-pointer">
-      <div className="relative overflow-hidden rounded-t-full aspect-[3/4]">
+    <div className="relative group cursor-pointer max-w-xs sm:max-w-none mx-15 w-full">
+      <div className="relative overflow-hidden rounded-t-full aspect-3/3 sm:aspect-3/4 max-h-65 sm:max-h-none ">
         <img
           src={imageSrc}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent"></div>
         <div className="absolute bottom-0 left-0 right-0 text-center text-white">
           <div className="bg-black/50 py-3 sm:py-4 md:py-5 px-3 sm:px-4">
             <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 tracking-wider" style={{ fontFamily: "Koulen" }}>
