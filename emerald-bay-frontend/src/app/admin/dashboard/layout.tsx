@@ -36,6 +36,27 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    label: "Tours",
+    href: "/admin/dashboard/tours",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="10" r="3" />
+        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 10-16 0c0 3 2.7 7 8 11.7z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Packages",
+    href: "/admin/dashboard/packages",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4" />
+        <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
+        <path d="M18 12a2 2 0 000 4h4v-4h-4z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function DashboardLayout({

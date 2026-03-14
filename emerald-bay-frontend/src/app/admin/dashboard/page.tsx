@@ -5,11 +5,15 @@ import { useRouter } from "next/navigation";
 const STATS = [
   { label: "Total Rooms", value: "3", change: "+0%", icon: "room" },
   { label: "Services", value: "4", change: "+0%", icon: "service" },
+  { label: "Tours", value: "4", change: "+0%", icon: "tour" },
+  { label: "Packages", value: "5", change: "+0%", icon: "package" },
 ];
 
 const QUICK_ACTIONS = [
   { label: "Manage Rooms", description: "Create, update rooms & pricing", href: "/admin/dashboard/rooms" },
   { label: "Manage Services", description: "Update service images", href: "/admin/dashboard/services" },
+  { label: "Manage Tours", description: "Create, update tour experiences", href: "/admin/dashboard/tours" },
+  { label: "Manage Packages", description: "Create, update promotional offers", href: "/admin/dashboard/packages" },
 ];
 
 export default function DashboardPage() {
@@ -23,12 +27,12 @@ export default function DashboardPage() {
           Welcome back, Admin
         </h1>
         <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
-          Manage your hotel rooms and services from here.
+          Manage your hotel rooms, services, tours and packages from here.
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {STATS.map((stat) => (
           <div
             key={stat.label}
@@ -47,6 +51,17 @@ export default function DashboardPage() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                ) : stat.icon === "tour" ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 10-16 0c0 3 2.7 7 8 11.7z" />
+                  </svg>
+                ) : stat.icon === "package" ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
+                    <path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4" />
+                    <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
+                    <path d="M18 12a2 2 0 000 4h4v-4h-4z" />
                   </svg>
                 ) : (
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
@@ -80,7 +95,7 @@ export default function DashboardPage() {
         <h3 className="text-lg font-semibold mb-4" style={{ color: "#FFFFFF" }}>
           Quick Actions
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {QUICK_ACTIONS.map((action) => (
             <button
               key={action.href}
