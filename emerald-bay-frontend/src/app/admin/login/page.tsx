@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLogin() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -44,8 +46,8 @@ export default function AdminLogin() {
     const isPasswordValid = validatePassword(password);
     
     if (isEmailValid && isPasswordValid) {
-      // Add login logic here
-      console.log("Login attempt:", { email, rememberMe });
+      // Navigate to admin dashboard
+      router.push("/admin/dashboard");
     }
   };
 
