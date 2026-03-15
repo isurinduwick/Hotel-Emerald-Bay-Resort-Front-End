@@ -12,8 +12,9 @@ type ServiceData = {
   title: string;
   subtitle: string;
   description: string;
-  sectionTitle: string;
-  items: ServiceItem[];
+  tagline?: string;
+  sectionTitle?: string;
+  items?: ServiceItem[];
 };
 
 const SERVICES: ServiceData[] = [
@@ -31,56 +32,36 @@ const SERVICES: ServiceData[] = [
     ],
   },
   {
-    imageSrc: "/pool2.png",
+    imageSrc: "/ROOFTOPPOOL2.jpeg",
     title: "ROOFTOP POOL",
     subtitle: "Skyview Pool",
     description:
-      "Soak in panoramic views from our breathtaking rooftop pool, a serene escape high above the city.",
-    sectionTitle: "POOL AMENITIES",
-    items: [
-      { name: "Infinity Edge Pool", imageSrc: "/pool2.png" },
-      { name: "Sun Loungers", imageSrc: "/pool2.png" },
-      { name: "Poolside Bar Service", imageSrc: "/pool2.png" },
-    ],
+      "Soak in panoramic views from our breathtaking rooftop pool — a serene escape suspended high above the city, designed for relaxation and tranquility in equal measure.",
+    tagline: "We look forward to welcoming you.",
   },
   {
-    imageSrc: "/restaurant.png",
+    imageSrc: "/RESTAURANT2.png",
     title: "RESTAURANT",
     subtitle: "Gourmet Experience",
     description:
-      "Savor exceptional cuisine crafted by our chefs using the finest seasonal and local ingredients.",
-    sectionTitle: "MENU HIGHLIGHTS",
-    items: [
-      { name: "Chef's Tasting Menu", imageSrc: "/restaurant.png" },
-      { name: "Fresh Seafood Platter", imageSrc: "/restaurant.png" },
-      { name: "Signature Desserts", imageSrc: "/restaurant.png" },
-    ],
+      "Savor exceptional cuisine crafted by our chefs using the finest seasonal and local ingredients, where every dish tells a story of passion, culture, and culinary artistry.",
+    tagline: "We look forward to welcoming you.",
   },
   {
-    imageSrc: "/celebrations.png",
+    imageSrc: "/CELEBRATIONS2.jpeg",
     title: "CELEBRATIONS",
     subtitle: "Joyful Moments",
     description:
-      "Let us make your special moments unforgettable with bespoke packages tailored to every occasion.",
-    sectionTitle: "OUR PACKAGES",
-    items: [
-      { name: "Wedding Package", imageSrc: "/celebrations.png" },
-      { name: "Birthday Celebration", imageSrc: "/celebrations.png" },
-      { name: "Corporate Events", imageSrc: "/celebrations.png" },
-    ],
+      "Let us make your special moments truly unforgettable. From intimate gatherings to grand occasions, our dedicated team crafts bespoke experiences tailored to every dream.",
+    tagline: "We look forward to welcoming you.",
   },
   {
     imageSrc: "/laundry.png",
     title: "LAUNDRY",
     subtitle: "Fresh & Clean",
     description:
-      "Experience premium laundry and dry-cleaning care using eco-friendly products for impeccable results.",
-    sectionTitle: "OUR SERVICES",
-    items: [
-      { name: "Same-Day Laundry", imageSrc: "/laundry.png" },
-      { name: "Dry Cleaning", imageSrc: "/laundry.png" },
-      { name: "Garment Pressing", imageSrc: "/laundry.png" },
-    ],
+      "Experience premium laundry and dry-cleaning care handled with precision, using eco-friendly products to ensure your garments are returned fresh, pressed, and immaculate.",
+    tagline: "We look forward to welcoming you.",
   },
 ];
 
@@ -240,6 +221,7 @@ function ServiceModal({
         className="
           relative flex flex-col sm:flex-row
           w-full sm:max-w-2xl lg:max-w-4xl
+          sm:h-[460px] lg:h-[500px]
           rounded-t-3xl sm:rounded-2xl
           overflow-hidden shadow-2xl animate-fadeInUp
         "
@@ -250,12 +232,11 @@ function ServiceModal({
             Mobile  → full-width strip at top, h-56
             Tablet+ → left half, min-height fills panel
         ── */}
-        <div className="relative w-full sm:w-5/12 lg:w-1/2 flex-shrink-0 h-56 sm:h-auto">
+        <div className="relative w-full sm:w-5/12 lg:w-1/2 flex-shrink-0 h-56 sm:h-full">
           <img
             src={service.imageSrc}
             alt={service.title}
-            className="w-full h-full object-cover"
-            style={{ minHeight: "100%" }}
+            className="absolute inset-0 w-full h-full object-cover"
           />
 
           {/* Subtle bottom fade on mobile so image bleeds into dark panel */}
@@ -299,7 +280,7 @@ function ServiceModal({
           />
 
           {/* Content */}
-          <div className="relative px-5 sm:px-7 lg:px-8 pt-5 sm:pt-8 pb-7 sm:pb-8 flex flex-col gap-0">
+          <div className="relative flex-1 flex flex-col px-5 sm:px-7 lg:px-8 pt-5 sm:pt-8 pb-7 sm:pb-8">
 
             {/* Title */}
             <h2
@@ -323,39 +304,51 @@ function ServiceModal({
             {/* Subtle separator */}
             <div className="w-full h-px bg-white/15 mb-4 sm:mb-5" />
 
-            {/* Section label */}
-            <p
-              className="text-[#C4A572] text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase mb-3 sm:mb-4"
-              style={{ fontFamily: "Libre Franklin" }}
-            >
-              {service.sectionTitle}
-            </p>
-
-            {/* Items list */}
-            <ul className="flex flex-col gap-2.5 sm:gap-3">
-              {service.items.map((item) => (
-                <li
-                  key={item.name}
-                  className="flex items-center gap-3 sm:gap-4 bg-white/5 rounded-lg px-3 py-2 sm:px-3 sm:py-2.5 border border-white/8"
+            {/* ── BAR: section label + items list ── */}
+            {service.sectionTitle && service.items && (
+              <>
+                <p
+                  className="text-[#C4A572] text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase mb-3 sm:mb-4"
+                  style={{ fontFamily: "Libre Franklin" }}
                 >
-                  {/* Thumbnail */}
-                  <div className="w-12 h-10 sm:w-14 sm:h-12 lg:w-16 lg:h-14 flex-shrink-0 rounded-md overflow-hidden">
-                    <img
-                      src={item.imageSrc}
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  {/* Name */}
-                  <span
-                    className="text-white text-xs sm:text-sm lg:text-base font-semibold"
-                    style={{ fontFamily: "Libre Franklin" }}
-                  >
-                    {item.name}
-                  </span>
-                </li>
-              ))}
-            </ul>
+                  {service.sectionTitle}
+                </p>
+                <ul className="flex flex-col gap-2.5 sm:gap-3">
+                  {service.items.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex items-center gap-3 sm:gap-4 bg-white/5 rounded-lg px-3 py-2 sm:px-3 sm:py-2.5 border border-white/8"
+                    >
+                      <div className="w-12 h-10 sm:w-14 sm:h-12 lg:w-16 lg:h-14 flex-shrink-0 rounded-md overflow-hidden">
+                        <img
+                          src={item.imageSrc}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span
+                        className="text-white text-xs sm:text-sm lg:text-base font-semibold"
+                        style={{ fontFamily: "Libre Franklin" }}
+                      >
+                        {item.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {/* ── Other cards: welcoming tagline centred in remaining space ── */}
+            {service.tagline && (
+              <div className="flex-1 flex items-center justify-center">
+                <p
+                  className="text-white/90 text-lg sm:text-xl lg:text-2xl text-center leading-snug"
+                  style={{ fontFamily: "DM Serif Display", fontStyle: "italic" }}
+                >
+                  {service.tagline}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
