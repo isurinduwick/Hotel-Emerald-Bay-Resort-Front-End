@@ -1,4 +1,22 @@
+"use client";
+
+import { useRef } from "react";
+
 export default function ServiceSectionNew() {
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (sliderRef.current) {
+      const cardWidth = sliderRef.current.firstElementChild
+        ? (sliderRef.current.firstElementChild as HTMLElement).offsetWidth + 24
+        : 300;
+      sliderRef.current.scrollBy({
+        left: direction === "left" ? -cardWidth : cardWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <section className="w-full bg-white pt-6 sm:pt-8 pb-12 sm:pb-18">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -18,12 +36,38 @@ export default function ServiceSectionNew() {
           </div>
         </div>
 
-        {/* Service Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          <ServiceCard imageSrc="/2ndimg.jpg" title="BAR" subtitle="Sip & Savor" />
-          <ServiceCard imageSrc="/pool2.png" title="ROOFTOP POOL" subtitle="Skyview Pool" />
-          <ServiceCard imageSrc="/restaurant.png" title="RESTAURANT" subtitle="Gourmet Experience" />
-          <ServiceCard imageSrc="/celebrations.png" title="CELEBRATIONS" subtitle="Joyful Moments" />
+        {/* Service Cards Slider */}
+        <div className="relative">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll("left")}
+            aria-label="Scroll left"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-5 z-10 bg-white shadow-md rounded-full w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center hover:bg-[#C4A572] hover:text-white transition-colors text-gray-700 text-lg"
+          >
+            &#8592;
+          </button>
+
+          {/* Slider Track */}
+          <div
+            ref={sliderRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <ServiceCard imageSrc="/2ndimg.jpg" title="BAR" subtitle="Sip & Savor" />
+            <ServiceCard imageSrc="/pool2.png" title="ROOFTOP POOL" subtitle="Skyview Pool" />
+            <ServiceCard imageSrc="/restaurant.png" title="RESTAURANT" subtitle="Gourmet Experience" />
+            <ServiceCard imageSrc="/celebrations.png" title="CELEBRATIONS" subtitle="Joyful Moments" />
+            <ServiceCard imageSrc="/laundry.png" title="LAUNDRY" subtitle="Fresh & Clean" />
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll("right")}
+            aria-label="Scroll right"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-5 z-10 bg-white shadow-md rounded-full w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center hover:bg-[#C4A572] hover:text-white transition-colors text-gray-700 text-lg"
+          >
+            &#8594;
+          </button>
         </div>
       </div>
     </section>
@@ -40,8 +84,8 @@ function ServiceCard({
   subtitle: string;
 }) {
   return (
-    <div className="relative group cursor-pointer max-w-xs sm:max-w-none mx-15 w-full">
-      <div className="relative overflow-hidden rounded-t-full aspect-3/3 sm:aspect-3/4 max-h-65 sm:max-h-none ">
+    <div className="relative group cursor-pointer flex-none w-[80%] sm:w-[44%] lg:w-[22%] snap-center">
+      <div className="relative overflow-hidden rounded-t-full aspect-3/3 sm:aspect-3/4 max-h-65 sm:max-h-none">
         <img
           src={imageSrc}
           alt={title}
