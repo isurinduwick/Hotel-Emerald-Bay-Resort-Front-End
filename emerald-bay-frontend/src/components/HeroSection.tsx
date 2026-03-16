@@ -12,6 +12,99 @@ export default function HeroSection() {
   return (
     <section style={{ position: "relative", width: "100%", overflow: "hidden", flexShrink: 0 }}>
       <style>{`
+        @keyframes heroFadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes heroLineReveal {
+          from {
+            clip-path: inset(0 100% 0 0);
+            opacity: 0;
+          }
+          to {
+            clip-path: inset(0 0% 0 0);
+            opacity: 1;
+          }
+        }
+        @keyframes heroGoldLine {
+          from {
+            width: 0;
+            opacity: 0;
+          }
+          to {
+            width: 60px;
+            opacity: 1;
+          }
+        }
+        @keyframes heroSlowZoom {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(1.08);
+          }
+        }
+        @keyframes heroFloat {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+        @keyframes heroGoldShimmer {
+          0%, 100% {
+            background-position: 0% 50%;
+            opacity: 0.7;
+          }
+          50% {
+            background-position: 100% 50%;
+            opacity: 1;
+          }
+        }
+        @keyframes heroSubtitleGlow {
+          0%, 100% {
+            opacity: 0.7;
+            letter-spacing: 0.25em;
+          }
+          50% {
+            opacity: 1;
+            letter-spacing: 0.3em;
+          }
+        }
+        .hero-bg-image {
+          animation: heroSlowZoom 18s ease-in-out infinite alternate;
+          will-change: transform;
+        }
+        .hero-headline-logo {
+          opacity: 0;
+          animation: heroFadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards,
+                     heroFloat 5s ease-in-out 2s infinite;
+        }
+        .hero-headline-line1 {
+          opacity: 0;
+          animation: heroLineReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+        }
+        .hero-headline-line2 {
+          opacity: 0;
+          animation: heroLineReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards;
+        }
+        .hero-gold-divider {
+          opacity: 0;
+          animation: heroGoldLine 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards,
+                     heroGoldShimmer 3s ease-in-out 2.5s infinite;
+        }
+        .hero-subtitle {
+          opacity: 0;
+          animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.8s forwards,
+                     heroSubtitleGlow 4s ease-in-out 3s infinite;
+        }
         .hero-nav-bar {
           position: absolute;
           width: clamp(320px, 42vw, 620px);
@@ -106,12 +199,21 @@ export default function HeroSection() {
           position: "relative",
           width: "100%",
           height: "clamp(320px, 50vw, 626px)",
-          backgroundImage: "url(/edited.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          overflow: "hidden",
           backgroundColor: "#2b1200",
         }}
       >
+        {/* Ken Burns sliding background */}
+        <div
+          className="hero-bg-image"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "url(/edited.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
         {/* Gradient overlay */}
         <div
           style={{
@@ -143,26 +245,55 @@ export default function HeroSection() {
         {/* Hero headline */}
         <div className="hero-headline" style={{ position: "absolute", bottom: "170px", left: "48px", zIndex: 5 }}>
           <img
+            className="hero-headline-logo"
             src="/logo.png"
             alt="Emerald Bay Resort"
             style={{ display: "block", width: "clamp(160px, 40vw, 210px)", marginBottom: "15px" }}
           />
           <h1
             style={{
-              fontFamily: "Georgia, 'Georgia'",
-              fontSize: "clamp(24px, 3.1vw, 45px)",
-              fontWeight: 700,
+              fontFamily: "var(--font-playfair), 'Playfair Display', Georgia, serif",
+              fontSize: "clamp(26px, 3.4vw, 50px)",
+              fontWeight: 600,
               fontStyle: "italic",
               color: "#ffffff",
-              lineHeight: 1.6,
+              lineHeight: 1.5,
               margin: 0,
-              textShadow: "0 2px 12px rgba(0,0,0,0.45)",
+              textShadow: "0 2px 16px rgba(0,0,0,0.4)",
+              letterSpacing: "0.02em",
             }}
           >
-            Spend Your Dream
+            <span className="hero-headline-line1" style={{ display: "inline-block" }}>
+              Spend Your Dream
+            </span>
             <br />
-            Holiday with us
+            <span className="hero-headline-line2" style={{ display: "inline-block" }}>
+              Holiday with us
+            </span>
           </h1>
+          <div
+            className="hero-gold-divider"
+            style={{
+              height: "2px",
+              background: "linear-gradient(90deg, #d4a853, #f5e6b8, #d4a853, transparent)",
+              backgroundSize: "200% 100%",
+              marginTop: "14px",
+              borderRadius: "1px",
+            }}
+          />
+          <p
+            className="hero-subtitle"
+            style={{
+              fontFamily: "'Cinzel', 'Trajan Pro', serif",
+              fontSize: "clamp(10px, 1.1vw, 14px)",
+              color: "rgba(255,255,255,0.8)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              marginTop: "10px",
+            }}
+          >
+            Luxury &middot; Comfort &middot; Serenity
+          </p>
         </div>
       </div>
 
