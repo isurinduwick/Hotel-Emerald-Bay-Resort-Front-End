@@ -1,6 +1,14 @@
 "use client";
 
-const NAV_ITEMS = ["ROOMS & SUITES", "SERVICES", "TOURS", "PACKAGES", "GALLERY"];
+import Link from "next/link";
+
+const NAV_ITEMS: { label: string; href: string }[] = [
+  { label: "ROOMS & SUITES", href: "/rooms-and-suites" },
+  { label: "SERVICES",       href: "#services" },
+  { label: "TOURS",          href: "#tours" },
+  { label: "PACKAGES",       href: "#packages" },
+  { label: "GALLERY",        href: "#gallery" },
+];
 
 const IMAGE_FRAMES = [
   { src: "/istimg.jpg", order: 1 },
@@ -225,16 +233,16 @@ export default function HeroSection() {
 
         {/* Nav bar */}
         <div className="hero-nav-bar">
-          {NAV_ITEMS.map((item, i) => (
-            <div key={item} style={{ display: "flex", alignItems: "center" }}>
-              <a
-                href={`#${item.toLowerCase().replace(/[\s&]+/g, "-")}`}
+          {NAV_ITEMS.map(({ label, href }, i) => (
+            <div key={label} style={{ display: "flex", alignItems: "center" }}>
+              <Link
+                href={href}
                 className="hero-nav-link"
                 onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.65")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.95")}
               >
-                {item}
-              </a>
+                {label}
+              </Link>
               {i < NAV_ITEMS.length - 1 && (
                 <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "7px", lineHeight: 1, userSelect: "none" }}>●</span>
               )}
