@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-[#E8DCC8] text-gray-800">
@@ -34,7 +36,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm font-semibold">
               <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">About Us</a></li>
               <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">Facilities</a></li>
-              <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">Rooms & Suits</a></li>
+              <li><Link href="/rooms-and-suites" className="text-gray-700 hover:text-[#C4A572] transition">Rooms &amp; Suites</Link></li>
               <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">Services</a></li>
               <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">Tours</a></li>
               <li><a href="#" className="text-gray-700 hover:text-[#C4A572] transition">Packages</a></li>
