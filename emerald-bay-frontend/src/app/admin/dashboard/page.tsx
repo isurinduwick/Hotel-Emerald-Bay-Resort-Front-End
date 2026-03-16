@@ -7,6 +7,7 @@ const STATS = [
   { label: "Services", value: "4", change: "+0%", icon: "service" },
   { label: "Tours", value: "4", change: "+0%", icon: "tour" },
   { label: "Packages", value: "5", change: "+0%", icon: "package" },
+  { label: "Gallery Photos", value: "8", change: "+0%", icon: "gallery" },
 ];
 
 const QUICK_ACTIONS = [
@@ -14,6 +15,7 @@ const QUICK_ACTIONS = [
   { label: "Manage Services", description: "Update service images", href: "/admin/dashboard/services" },
   { label: "Manage Tours", description: "Create, update tour experiences", href: "/admin/dashboard/tours" },
   { label: "Manage Packages", description: "Create, update promotional offers", href: "/admin/dashboard/packages" },
+  { label: "Manage Gallery", description: "Add, remove gallery photos", href: "/admin/dashboard/gallery" },
 ];
 
 export default function DashboardPage() {
@@ -32,7 +34,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {STATS.map((stat) => (
           <div
             key={stat.label}
@@ -62,6 +64,12 @@ export default function DashboardPage() {
                     <path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4" />
                     <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
                     <path d="M18 12a2 2 0 000 4h4v-4h-4z" />
+                  </svg>
+                ) : stat.icon === "gallery" ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
                   </svg>
                 ) : (
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="1.8">
@@ -95,7 +103,7 @@ export default function DashboardPage() {
         <h3 className="text-lg font-semibold mb-4" style={{ color: "#FFFFFF" }}>
           Quick Actions
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {QUICK_ACTIONS.map((action) => (
             <button
               key={action.href}
