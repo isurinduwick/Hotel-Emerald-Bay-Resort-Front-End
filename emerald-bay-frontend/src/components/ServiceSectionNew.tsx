@@ -264,7 +264,7 @@ function ServiceModal({
 
         {/* ── Dark content panel ── */}
         <div
-          className="relative flex-1 flex flex-col overflow-y-auto"
+          className="relative flex-1 flex flex-col overflow-hidden"
           style={{ backgroundColor: "#0f0d0b" }}
         >
           {/* Blurred bg texture */}
