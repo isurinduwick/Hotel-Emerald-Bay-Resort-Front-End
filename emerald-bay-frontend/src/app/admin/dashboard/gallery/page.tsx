@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { API_BASE_URL, GALLERY_IMAGES_API, apiFetch } from "@/lib/api";
+import { useAdminAuth } from "@/hooks/useAdmin";
 
 interface GalleryImage {
   id: number;
@@ -11,19 +13,29 @@ interface GalleryImage {
 
 const CATEGORIES = ["All", "Rooms", "Pool", "Restaurant", "Beach", "Spa", "Events"];
 
-const INITIAL_IMAGES: GalleryImage[] = [
-  { id: 1, src: "/roomimg1.jpg", caption: "Superior Ocean View Room", category: "Rooms" },
-  { id: 2, src: "/roomimg2.jpg", caption: "Beachfront Suite", category: "Rooms" },
-  { id: 3, src: "/2ndimg.jpg", caption: "Deluxe Double Room", category: "Rooms" },
-  { id: 4, src: "/pool2.png", caption: "Rooftop Infinity Pool", category: "Pool" },
-  { id: 5, src: "/discoverimg1.jpg", caption: "Ocean View Dining", category: "Restaurant" },
-  { id: 6, src: "/discoverimg2.jpg", caption: "Sunset Beach Lounge", category: "Beach" },
-  { id: 7, src: "/discoverimg3.jpg", caption: "Tropical Garden Path", category: "Spa" },
-  { id: 8, src: "/discoverimg4.jpg", caption: "Private Beach Cabana", category: "Beach" },
-];
+const normalizeGallerySrc = (src?: string): string => {
+  if (!src) return "";
+
+  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
+    return src;
+  }
+
+  if (src.startsWith("/")) {
+    return `${API_BASE_URL}${src}`;
+  }
+
+  return `${API_BASE_URL}/${src}`;
+};
+
+const normalizeGalleryImage = (image: GalleryImage): GalleryImage => ({
+  ...image,
+  src: normalizeGallerySrc(image.src),
+});
 
 export default function GalleryPage() {
-  const [images, setImages] = useState<GalleryImage[]>(INITIAL_IMAGES);
+  const { token, isLoading: authLoading } = useAdminAuth();
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   const [caption, setCaption] = useState("");
   const [category, setCategory] = useState("");
@@ -33,7 +45,31 @@ export default function GalleryPage() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [viewImage, setViewImage] = useState<GalleryImage | null>(null);
+  const [apiError, setApiError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch gallery images on mount
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (!token || authLoading) return;
+
+      try {
+        setInitialLoading(true);
+        const data = await apiFetch(GALLERY_IMAGES_API.LIST, { token });
+        const imagesArray = Array.isArray(data) ? data : data?.data || [];
+        setImages(imagesArray.map(normalizeGalleryImage));
+        setApiError("");
+      } catch (err) {
+        console.error("Failed to fetch gallery images:", err);
+        setApiError("Failed to load gallery images");
+        setImages([]);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, [token, authLoading]);
 
   const showSuccess = (msg: string) => {
     setSuccessMessage(msg);
@@ -58,25 +94,55 @@ export default function GalleryPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleAdd = () => {
-    if (!previewSrc || !category) return;
+  const handleAdd = async () => {
+    if (!previewSrc || !category || !token) return;
 
-    const newImage: GalleryImage = {
-      id: Date.now(),
-      src: previewSrc,
-      caption: caption || "Untitled",
-      category,
-    };
+    try {
+      const response = await apiFetch(GALLERY_IMAGES_API.CREATE, {
+        method: "POST",
+        data: { src: previewSrc, caption: caption || "Untitled", category },
+        token,
+      });
 
-    setImages((prev) => [newImage, ...prev]);
-    showSuccess("Photo added to gallery!");
-    resetUpload();
+      const createdImage = response?.data ?? response;
+
+      if (createdImage && createdImage.id) {
+        setImages((prev) => [normalizeGalleryImage(createdImage), ...prev]);
+        showSuccess("Photo added to gallery!");
+        resetUpload();
+        setApiError("");
+      } else {
+        setApiError("Failed to save photo. Please refresh and try again.");
+      }
+    } catch (err) {
+      console.error("Failed to add photo:", err);
+      setApiError("Failed to add photo");
+    }
   };
 
-  const handleDelete = (id: number) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
-    setDeleteConfirmId(null);
-    showSuccess("Photo removed from gallery!");
+  const handleDelete = async (id: number) => {
+    if (!token) return;
+
+    try {
+      // Remove from local state immediately
+      setImages((prev) => prev.filter((img) => img.id !== id));
+      setDeleteConfirmId(null);
+      showSuccess("Photo removed from gallery!");
+
+      // Also send delete to API in background
+      try {
+        await apiFetch(GALLERY_IMAGES_API.DELETE(id), {
+          method: "DELETE",
+          token,
+        });
+      } catch (err) {
+        console.error("Failed to delete from API:", err);
+        // Image is removed from local state, but API delete failed
+      }
+    } catch (err) {
+      console.error("Failed to delete photo:", err);
+      setApiError("Failed to delete photo");
+    }
   };
 
   const filtered = filterCategory === "All" ? images : images.filter((img) => img.category === filterCategory);
@@ -94,6 +160,20 @@ export default function GalleryPage() {
           }}
         >
           {successMessage}
+        </div>
+      )}
+
+      {/* Error Toast */}
+      {apiError && (
+        <div
+          className="fixed top-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-lg animate-pulse"
+          style={{
+            backgroundColor: "rgba(239, 68, 68, 0.15)",
+            color: "#FCA5A5",
+            border: "1px solid #EF4444",
+          }}
+        >
+          {apiError}
         </div>
       )}
 
@@ -440,7 +520,19 @@ export default function GalleryPage() {
       </div>
 
       {/* Gallery Grid */}
-      {filtered.length > 0 ? (
+      {initialLoading ? (
+        <div className="text-center py-16">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full mb-4" style={{ backgroundColor: "rgba(179,153,119,0.1)" }}>
+            <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B39977" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2v4M12 18v4M22 12h-4M4 12H0" />
+            </svg>
+          </div>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+            Loading gallery...
+          </p>
+        </div>
+      ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((img) => (
             <div
