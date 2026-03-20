@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Helper function to add CORS headers to any response
+function addCorsHeaders(response: NextResponse): NextResponse {
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return response;
+}
+
 export async function POST(request: NextRequest) {
     return handleProxyRequest(request);
 }
@@ -21,15 +29,19 @@ export async function OPTIONS(request: NextRequest) {
 }
 
 async function handleProxyRequest(request: NextRequest) {
+    let targetUrl: string | null = null;
+
     try {
         // Get the target URL from the query parameter
-        const targetUrl = request.nextUrl.searchParams.get('url');
+        targetUrl = request.nextUrl.searchParams.get('url');
+
+        console.log(`[PROXY] ${request.method} request:`, { url: targetUrl });
 
         if (!targetUrl) {
-            return NextResponse.json(
+            return addCorsHeaders(NextResponse.json(
                 { error: 'Missing target URL' },
                 { status: 400 }
-            );
+            ));
         }
 
         // Get the request body if it exists
@@ -59,7 +71,8 @@ async function handleProxyRequest(request: NextRequest) {
         // Only forward essential headers, not all request headers
         const forwardHeaders: Record<string, string> = {};
 
-        if (contentType && body !== null) {
+        // Let fetch set multipart boundaries automatically when forwarding FormData.
+        if (contentType && body !== null && !contentType.includes('multipart/form-data')) {
             forwardHeaders['Content-Type'] = contentType;
         }
 
@@ -68,6 +81,19 @@ async function handleProxyRequest(request: NextRequest) {
         if (auth) {
             forwardHeaders['Authorization'] = auth;
         }
+
+        // Forward origin from incoming request (or set to current origin)
+        const incomingOrigin = request.headers.get('origin') || request.headers.get('referer')?.split('/').slice(0, 3).join('/');
+        if (incomingOrigin) {
+            forwardHeaders['Origin'] = incomingOrigin;
+        }
+
+        console.log(`[PROXY] Forwarding to backend:`, {
+            targetUrl,
+            method: request.method,
+            headers: forwardHeaders,
+            bodySize: body ? (typeof body === 'string' ? body.length : 'FormData') : null,
+        });
 
         const response = await fetch(targetUrl, {
             method: request.method,
@@ -80,74 +106,111 @@ async function handleProxyRequest(request: NextRequest) {
         const responseText = await response.text();
         const responseContentType = response.headers.get('content-type');
 
+        console.log(`[PROXY] Backend response:`, {
+            status: response.status,
+            statusText: response.statusText,
+            contentType: responseContentType,
+            bodySize: responseText.length,
+            bodyPreview: responseText.substring(0, 500),
+        });
+
+        // Debug log for non-JSON responses
+        if (!responseContentType?.includes('application/json')) {
+            console.warn(`[PROXY] ⚠️ Backend returned non-JSON response:`, {
+                contentType: responseContentType,
+                bodyPreview: responseText.substring(0, 200),
+            });
+        }
+
         // Check if response is HTML (error page) - always treat as error
         if (responseContentType?.includes('text/html')) {
-            return NextResponse.json(
+            return addCorsHeaders(NextResponse.json(
                 {
                     error: `Backend returned HTML error: ${response.status} ${response.statusText}`,
                     status: response.status,
                 },
                 { status: response.status || 500 }
-            );
+            ));
         }
 
         // If status is not OK, return error JSON
         if (!response.ok) {
             try {
                 const errorData = JSON.parse(responseText);
-                return NextResponse.json(errorData, { status: response.status });
+                return addCorsHeaders(NextResponse.json(errorData, { status: response.status }));
             } catch {
-                return NextResponse.json(
+                return addCorsHeaders(NextResponse.json(
                     {
                         error: `Backend error: ${response.status} ${response.statusText}`,
                         status: response.status,
                     },
                     { status: response.status || 500 }
-                );
+                ));
             }
         }
 
         // Parse successful JSON response
-        let responseBody = responseText;
-        if (responseContentType?.includes('application/json')) {
-            try {
-                // Validate it's valid JSON
-                JSON.parse(responseText);
-                responseBody = responseText;
-            } catch {
-                return NextResponse.json(
-                    { error: 'Backend returned invalid JSON' },
-                    { status: 500 }
-                );
-            }
+        if (!responseContentType?.includes('application/json')) {
+            // Backend returned successful status but not JSON - treat as error
+            return addCorsHeaders(NextResponse.json(
+                {
+                    error: `Backend returned non-JSON response: ${responseContentType || 'no content-type'}`,
+                    status: response.status,
+                },
+                { status: 500 }
+            ));
         }
 
-        // Create the response
-        const result = new NextResponse(responseBody, {
+        try {
+            // Validate it's valid JSON
+            JSON.parse(responseText);
+        } catch {
+            return addCorsHeaders(NextResponse.json(
+                { error: 'Backend returned invalid JSON' },
+                { status: 500 }
+            ));
+        }
+
+        // Create the response with the JSON body
+        const result = new NextResponse(responseText, {
             status: response.status,
             statusText: response.statusText,
         });
 
-        // Copy relevant headers
-        ['content-type', 'content-length', 'cache-control'].forEach((header) => {
-            const value = response.headers.get(header);
-            if (value) {
-                result.headers.set(header, value);
-            }
-        });
-
-        // Always ensure content-type is application/json
+        // Set content-type to application/json
         result.headers.set('Content-Type', 'application/json');
 
-        return result;
+        return addCorsHeaders(result);
     } catch (error) {
         console.error('Proxy error:', error);
-        return NextResponse.json(
+
+        // More detailed error logging for debugging
+        let errorDetails = '';
+        if (error instanceof TypeError) {
+            errorDetails = `Network error: ${error.message}`;
+        } else if (error instanceof Error) {
+            errorDetails = error.message;
+        } else {
+            errorDetails = String(error);
+        }
+
+        console.error('Proxy detailed error:', {
+            targetUrl,
+            method: request.method,
+            errorMessage: errorDetails,
+            errorType: error?.constructor?.name,
+            errorStack: error instanceof Error ? error.stack : 'N/A',
+        });
+
+        const errorResponse = NextResponse.json(
             {
                 error: 'Proxy request failed',
-                details: error instanceof Error ? error.message : String(error),
+                details: errorDetails,
+                targetUrl: targetUrl,
             },
             { status: 500 }
         );
+
+        return addCorsHeaders(errorResponse);
     }
 }

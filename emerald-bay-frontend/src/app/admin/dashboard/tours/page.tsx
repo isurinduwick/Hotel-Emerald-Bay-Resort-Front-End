@@ -36,6 +36,7 @@ const normalizeTourImageUrl = (image?: string | null): string => {
 
 const normalizeTour = (tour: Tour): Tour => ({
   ...tour,
+  description: tour.description || "",
   image: normalizeTourImageUrl(tour.image),
 });
 
@@ -118,7 +119,7 @@ export default function ToursPage() {
     try {
       const tourData = {
         name: formData.name,
-        description: formData.description,
+        description: formData.description || "",
         duration: formData.duration,
         location: formData.location,
         image: previewImage || "/safariimg.jpg",
@@ -153,26 +154,26 @@ export default function ToursPage() {
     }
 
     try {
-      const tourData = {
-        name: formData.name || editingTour.name,
-        description: formData.description || editingTour.description,
-        duration: formData.duration || editingTour.duration,
-        location: formData.location || editingTour.location,
-        image: previewImage || editingTour.image,
-        status: formData.status,
-      };
+      // Use FormData with _method=PUT for broader server compatibility
+      const tourFormData = new FormData();
+      tourFormData.append('name', formData.name || editingTour.name);
+      tourFormData.append('description', formData.description || editingTour.description || "");
+      tourFormData.append('duration', formData.duration || editingTour.duration);
+      tourFormData.append('location', formData.location || editingTour.location);
+      tourFormData.append('status', formData.status);
+      tourFormData.append('_method', 'PUT');
 
       const response = await apiFetch(TOURS_API.UPDATE(editingTour.id), {
-        method: "PUT",
-        data: tourData,
+        method: "POST",
+        formData: tourFormData,
         token,
       });
 
-      const updatedTour = response?.data ?? response;
+      const updatedTour = normalizeTour(response?.data ?? response);
 
       if (updatedTour && updatedTour.id) {
         setTours((prev) =>
-          prev.map((t) => (t.id === editingTour.id ? normalizeTour(updatedTour) : t))
+          prev.map((t) => (t.id === editingTour.id ? updatedTour : t))
         );
         showSuccess("Tour updated successfully!");
         resetForm();
@@ -220,12 +221,46 @@ export default function ToursPage() {
     }
   };
 
-  const handleToggleStatus = (id: number) => {
-    setTours((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, status: t.status === "active" ? "draft" : "active" } : t
-      )
-    );
+  const handleToggleStatus = async (id: number) => {
+    if (!token) {
+      setApiError("Authentication required");
+      return;
+    }
+
+    const targetTour = tours.find((t) => t.id === id);
+    if (!targetTour) return;
+
+    const nextStatus: "active" | "draft" = targetTour.status === "active" ? "draft" : "active";
+
+    try {
+      // Use FormData with _method=PUT for broader server compatibility
+      const tourFormData = new FormData();
+      tourFormData.append('name', targetTour.name);
+      tourFormData.append('description', targetTour.description || '');
+      tourFormData.append('duration', targetTour.duration);
+      tourFormData.append('location', targetTour.location);
+      tourFormData.append('status', nextStatus);
+      tourFormData.append('_method', 'PUT');
+
+      const response = await apiFetch(TOURS_API.UPDATE(id), {
+        method: "POST",
+        formData: tourFormData,
+        token,
+      });
+
+      const updatedTour = normalizeTour(response?.data ?? response);
+
+      if (!updatedTour || !updatedTour.id) {
+        setApiError("Failed to update tour status");
+        return;
+      }
+
+      setTours((prev) => prev.map((t) => (t.id === id ? updatedTour : t)));
+      showSuccess(`Tour set to ${nextStatus}`);
+    } catch (error) {
+      console.error("Status toggle error:", error);
+      setApiError("Failed to update tour status. Please try again.");
+    }
   };
 
   const filteredTours = tours.filter((t) => {
@@ -755,7 +790,7 @@ export default function ToursPage() {
                   className="rounded-2xl overflow-hidden flex flex-col sm:flex-row"
                   style={{ backgroundColor: "#1a1d27", border: "1px solid rgba(255,255,255,0.06)" }}
                 >
-                  <div className="w-full sm:w-48 h-36 sm:h-auto flex-shrink-0 relative">
+                  <div className="w-full sm:w-48 h-36 sm:h-auto shrink-0 relative">
                     <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" />
                     <div className="absolute top-2 right-2 sm:top-2 sm:left-2 sm:right-auto">
                       <span

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ROOMS_API, IMAGES_API, apiFetch, API_BASE_URL } from "@/lib/api";
+import { ROOMS_API, apiFetch, API_BASE_URL } from "@/lib/api";
 import { useAdminAuth } from "@/hooks/useAdmin";
 
 interface Room {
@@ -12,6 +12,14 @@ interface Room {
   description: string;
   images: string[];
 }
+
+const unwrapApiEntity = <T,>(response: T | { data?: T } | null | undefined): T | null => {
+  if (!response) return null;
+  if (typeof response === 'object' && response !== null && 'data' in response) {
+    return ((response as { data?: T }).data ?? null) as T | null;
+  }
+  return response as T;
+};
 
 const ROOM_SIZES = [
   "Small (15-20 sqm)",
@@ -36,6 +44,11 @@ const getImageUrl = (image: any): string => {
   }
 
   if (!imagePath) return '';
+
+  // Keep client-side preview sources untouched.
+  if (imagePath.startsWith('data:image/') || imagePath.startsWith('blob:')) {
+    return imagePath;
+  }
 
   // If it's already a full URL, return as-is
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
@@ -173,50 +186,49 @@ export default function RoomsPage() {
     }
 
     try {
-      // Step 1: Create the room first (without images)
-      const roomData = {
+      const hasNewImages = imageFiles.length > 0;
+
+      const payload = {
         name: formData.name,
         size: formData.size,
         price: formData.price,
-        description: formData.description,
+        description: formData.description || '',
       };
 
-      const response = await apiFetch(ROOMS_API.CREATE, {
-        method: "POST",
-        data: roomData,
-        token,
-      });
+      let apiResponse;
+
+      if (hasNewImages) {
+        const roomFormData = new FormData();
+        roomFormData.append('name', payload.name);
+        roomFormData.append('size', payload.size);
+        roomFormData.append('price', payload.price);
+        roomFormData.append('description', payload.description);
+
+        for (const imageFile of imageFiles) {
+          roomFormData.append('image_files[]', imageFile);
+        }
+
+        apiResponse = await apiFetch(ROOMS_API.CREATE, {
+          method: "POST",
+          formData: roomFormData,
+          token,
+        });
+      } else {
+        apiResponse = await apiFetch(ROOMS_API.CREATE, {
+          method: "POST",
+          data: payload,
+          token,
+        });
+      }
+
+      const response = unwrapApiEntity<Room>(apiResponse);
 
       if (!response || !response.id) {
         setApiError("Failed to create room - no ID in response");
         return;
       }
 
-      // Step 2: Upload images if any exist (only new images)
-      if (imageFiles.length > 0) {
-        try {
-          for (const imageFile of imageFiles) {
-            const imgFormData = new FormData();
-            imgFormData.append('image', imageFile);
-
-            await apiFetch(IMAGES_API.ROOM_IMAGE_CREATE(response.id), {
-              method: "POST",
-              formData: imgFormData,
-              token,
-            });
-          }
-        } catch (imageError) {
-          console.error("Error uploading images:", imageError);
-          // Don't fail the entire operation if images fail, just show warning
-          setApiError("Room created but some images failed to upload");
-          // Still add the room to the list without images
-          setRooms((prev) => [...prev, response]);
-          resetForm();
-          return;
-        }
-      }
-
-      // Step 3: If we have the new room with images, add it to the list
+      // Fetch the latest room images for UI consistency.
       // Fetch the images for this room
       try {
         const images = await apiFetch(ROOMS_API.IMAGES(response.id), { token });
@@ -245,51 +257,43 @@ export default function RoomsPage() {
     }
 
     try {
-      // Step 1: Update the room data (name, size, price, description)
-      const roomData = {
+      const hasNewImages = imageFiles.length > 0;
+
+      const payload = {
         name: formData.name || editingRoom.name,
         size: formData.size || editingRoom.size,
         price: formData.price || editingRoom.price,
-        description: formData.description || editingRoom.description,
+        description: formData.description || editingRoom.description || '',
       };
 
-      const response = await apiFetch(ROOMS_API.UPDATE(editingRoom.id), {
-        method: "PUT",
-        data: roomData,
+      const roomFormData = new FormData();
+      roomFormData.append('name', payload.name);
+      roomFormData.append('size', payload.size);
+      roomFormData.append('price', payload.price);
+      roomFormData.append('description', payload.description);
+
+      if (hasNewImages) {
+        for (const imageFile of imageFiles) {
+          roomFormData.append('image_files[]', imageFile);
+        }
+      }
+
+      roomFormData.append('_method', 'PUT');
+
+      const apiResponse = await apiFetch(ROOMS_API.UPDATE(editingRoom.id), {
+        method: "POST",
+        formData: roomFormData,
         token,
       });
+
+      const response = unwrapApiEntity<Room>(apiResponse);
 
       if (!response || !response.id) {
         setApiError("Failed to update room");
         return;
       }
 
-      // Step 2: Upload new images if any were selected for upload
-      if (imageFiles.length > 0) {
-        try {
-          for (const imageFile of imageFiles) {
-            const imgFormData = new FormData();
-            imgFormData.append('image', imageFile);
-
-            await apiFetch(IMAGES_API.ROOM_IMAGE_CREATE(editingRoom.id), {
-              method: "POST",
-              formData: imgFormData,
-              token,
-            });
-          }
-        } catch (imageError) {
-          console.error("Error uploading images:", imageError);
-          setApiError("Room updated but some images failed to upload");
-          // Still update the room in the list
-          setRooms((prev) =>
-            prev.map((r) => (r.id === editingRoom.id ? response : r))
-          );
-          resetForm();
-          return;
-        }
-      }
-
-      // Step 3: Fetch the updated room with all its latest images
+      // Fetch the updated room with all its latest images
       try {
         const images = await apiFetch(ROOMS_API.IMAGES(editingRoom.id), { token });
         const fullRoomData = {
@@ -320,7 +324,7 @@ export default function RoomsPage() {
       name: room.name,
       size: room.size,
       price: room.price,
-      description: room.description,
+      description: room.description || '',
     });
     // Set preview images to existing room images, marked as not new
     setPreviewImages((room.images || []).map((img) => ({ src: img, isNew: false })));
@@ -557,7 +561,7 @@ export default function RoomsPage() {
                   DESCRIPTION
                 </label>
                 <textarea
-                  value={formData.description}
+                  value={formData.description || ''}
                   onChange={(e) => setFormData((f) => ({ ...f, description: e.target.value }))}
                   placeholder="Describe the room features, amenities, and experience..."
                   rows={3}
@@ -657,7 +661,7 @@ export default function RoomsPage() {
               >
                 {/* Image */}
                 {room.images && room.images.length > 0 ? (
-                  <div className="w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 relative">
+                  <div className="w-full sm:w-48 h-40 sm:h-auto shrink-0 relative">
                     <img
                       src={getImageUrl(room.images[0])}
                       alt={room.name}
@@ -679,7 +683,7 @@ export default function RoomsPage() {
                     )}
                   </div>
                 ) : (
-                  <div className="w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 relative bg-gray-700 flex items-center justify-center">
+                  <div className="w-full sm:w-48 h-40 sm:h-auto shrink-0 relative bg-gray-700 flex items-center justify-center">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5">
                       <rect x="3" y="3" width="18" height="18" rx="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />

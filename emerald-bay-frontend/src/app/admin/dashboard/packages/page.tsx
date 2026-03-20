@@ -161,27 +161,27 @@ export default function PackagesPage() {
     }
 
     try {
-      const packageData = {
-        title: formData.title || editingPackage.title,
-        description: formData.description || editingPackage.description,
-        ctaText: formData.ctaText || editingPackage.ctaText,
-        validUntil: formData.validUntil || editingPackage.validUntil,
-        highlight: formData.highlight || editingPackage.highlight,
-        image: previewImage || editingPackage.image,
-        status: formData.status,
-      };
+      // Use FormData with _method=PUT for broader server compatibility
+      const packageFormData = new FormData();
+      packageFormData.append('title', formData.title || editingPackage.title);
+      packageFormData.append('description', formData.description || editingPackage.description);
+      packageFormData.append('ctaText', formData.ctaText || editingPackage.ctaText);
+      packageFormData.append('validUntil', formData.validUntil || editingPackage.validUntil);
+      packageFormData.append('highlight', formData.highlight || editingPackage.highlight);
+      packageFormData.append('status', formData.status);
+      packageFormData.append('_method', 'PUT');
 
       const response = await apiFetch(PACKAGES_API.UPDATE(editingPackage.id), {
-        method: "PUT",
-        data: packageData,
+        method: "POST",
+        formData: packageFormData,
         token,
       });
 
-      const updatedPackage = response?.data ?? response;
+      const updatedPackage = normalizePackage(response?.data ?? response);
 
       if (updatedPackage && updatedPackage.id) {
         setPackages((prev) =>
-          prev.map((p) => (p.id === editingPackage.id ? normalizePackage(updatedPackage) : p))
+          prev.map((p) => (p.id === editingPackage.id ? updatedPackage : p))
         );
         showSuccess("Package updated successfully!");
         resetForm();
@@ -230,12 +230,47 @@ export default function PackagesPage() {
     }
   };
 
-  const handleToggleStatus = (id: number) => {
-    setPackages((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, status: p.status === "active" ? "draft" : "active" } : p
-      )
-    );
+  const handleToggleStatus = async (id: number) => {
+    if (!token) {
+      setApiError("Authentication required");
+      return;
+    }
+
+    const targetPackage = packages.find((p) => p.id === id);
+    if (!targetPackage) return;
+
+    const nextStatus: "active" | "draft" = targetPackage.status === "active" ? "draft" : "active";
+
+    try {
+      // Use FormData with _method=PUT for broader server compatibility
+      const packageFormData = new FormData();
+      packageFormData.append('title', targetPackage.title);
+      packageFormData.append('description', targetPackage.description);
+      packageFormData.append('ctaText', targetPackage.ctaText);
+      packageFormData.append('validUntil', targetPackage.validUntil);
+      packageFormData.append('highlight', targetPackage.highlight);
+      packageFormData.append('status', nextStatus);
+      packageFormData.append('_method', 'PUT');
+
+      const response = await apiFetch(PACKAGES_API.UPDATE(id), {
+        method: "POST",
+        formData: packageFormData,
+        token,
+      });
+
+      const updatedPackage = normalizePackage(response?.data ?? response);
+
+      if (!updatedPackage || !updatedPackage.id) {
+        setApiError("Failed to update package status");
+        return;
+      }
+
+      setPackages((prev) => prev.map((p) => (p.id === id ? updatedPackage : p)));
+      showSuccess(`Package set to ${nextStatus}`);
+    } catch (error) {
+      console.error("Status toggle error:", error);
+      setApiError("Failed to update package status. Please try again.");
+    }
   };
 
   const filteredPackages = packages.filter((p) => {
@@ -717,7 +752,7 @@ export default function PackagesPage() {
               {filteredPackages.map((pkg) => (
                 <div key={pkg.id} className="rounded-2xl overflow-hidden flex flex-col sm:flex-row"
                   style={{ backgroundColor: "#1a1d27", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div className="w-full sm:w-48 h-36 sm:h-auto flex-shrink-0 relative">
+                  <div className="w-full sm:w-48 h-36 sm:h-auto shrink-0 relative">
                     <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
                     <div className="absolute top-2 left-2 flex gap-1">
                       <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase"
