@@ -3,8 +3,10 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const ROOMS = [
+// Fallback rooms data for display if API fails
+const FALLBACK_ROOMS = [
   {
     id: 1,
     type: "STANDARD",
@@ -152,7 +154,81 @@ const BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   PREMIUM:  { bg: "rgba(150,90,160,0.15)", text: "#7a3a8a" },
 };
 
+interface Room {
+  id: number;
+  type: string;
+  name: string;
+  size: string;
+  guests: number;
+  beds: string;
+  price: number;
+  description: string;
+  image: string;
+  amenities: string[];
+}
+
 export default function RoomsAndSuitesPage() {
+  const [rooms, setRooms] = useState<Room[]>(FALLBACK_ROOMS);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("https://api.emeraldbayresorts.com/api/v1/rooms");
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch rooms: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Handle different API response structures
+        const rawRooms = Array.isArray(data) ? data : data?.data || data;
+
+        // Map API response to Room interface
+        const mappedRooms = rawRooms.map((apiRoom: any, index: number) => {
+          // Get fallback room for default values
+          const fallbackRoom = FALLBACK_ROOMS[index] || FALLBACK_ROOMS[0];
+
+          // Extract image URL - handle both single image string and array of images
+          let imageUrl = fallbackRoom.image;
+          if (apiRoom.image) {
+            imageUrl = apiRoom.image;
+          } else if (apiRoom.images && Array.isArray(apiRoom.images) && apiRoom.images.length > 0) {
+            // If API returns images array, take the first image's URL
+            imageUrl = apiRoom.images[0].image_url || apiRoom.images[0].url || apiRoom.images[0];
+          }
+
+          return {
+            id: apiRoom.id || fallbackRoom.id,
+            image: imageUrl,
+            name: apiRoom.title || apiRoom.name || fallbackRoom.name,
+            description: apiRoom.description || fallbackRoom.description,
+            price: apiRoom.price || fallbackRoom.price,
+            size: apiRoom.size || apiRoom.room_size || fallbackRoom.size,
+            // Keep these from fallback
+            type: apiRoom.type || fallbackRoom.type,
+            guests: apiRoom.guests || fallbackRoom.guests,
+            beds: apiRoom.beds || fallbackRoom.beds,
+            amenities: apiRoom.amenities || fallbackRoom.amenities,
+          };
+        });
+
+        setRooms(mappedRooms);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch rooms:", err);
+        setError("Failed to load rooms. Using cached data.");
+        // Falls back to FALLBACK_ROOMS
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans overflow-x-hidden">
       <Navbar />
@@ -289,13 +365,31 @@ export default function RoomsAndSuitesPage() {
           </div>
         </section>
 
+        {/* ── Loading/Error State ──────────────────────────────── */}
+        {loading && (
+          <section style={{ backgroundColor: "#EDE6D9", padding: "80px 20px", textAlign: "center" }}>
+            <div style={{ fontFamily: "var(--font-playfair), serif", fontSize: "18px", color: "#B39977" }}>
+              Loading rooms...
+            </div>
+          </section>
+        )}
+
+        {error && (
+          <section style={{ backgroundColor: "#EDE6D9", padding: "20px" }}>
+            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px", backgroundColor: "rgba(255,200,200,0.2)", borderRadius: "8px", color: "#d64545" }}>
+              {error}
+            </div>
+          </section>
+        )}
+
         {/* ── Rooms Grid ───────────────────────────────────────── */}
-        <section style={{ backgroundColor: "#EDE6D9", padding: "40px clamp(16px, 6vw, 80px) 80px" }}>
-          <div
-            className="rooms-grid"
-            style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "28px" }}
-          >
-            {ROOMS.map((room) => {
+        {!loading && (
+          <section style={{ backgroundColor: "#EDE6D9", padding: "40px clamp(16px, 6vw, 80px) 80px" }}>
+            <div
+              className="rooms-grid"
+              style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "28px" }}
+            >
+              {rooms.map((room) => {
               const badge = BADGE_COLORS[room.type] ?? BADGE_COLORS.STANDARD;
               return (
                 <div
@@ -406,7 +500,7 @@ export default function RoomsAndSuitesPage() {
 
                     {/* Amenity icons */}
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "20px" }}>
-                      {room.amenities.map((a) => (
+                      {room.amenities?.map((a) => (
                         <span
                           key={a}
                           style={{
@@ -471,6 +565,7 @@ export default function RoomsAndSuitesPage() {
             })}
           </div>
         </section>
+        )}
 
         {/* ── Amenities Banner ────────────────────────────────── */}
         <section

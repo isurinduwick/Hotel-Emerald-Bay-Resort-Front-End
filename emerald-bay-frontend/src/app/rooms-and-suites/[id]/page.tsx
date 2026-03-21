@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-// Room data (same as in parent page)
-const ROOMS = [
+// Fallback room data for display if API fails
+const FALLBACK_ROOMS = [
   {
     id: 1,
     type: "STANDARD",
@@ -201,12 +201,111 @@ const AMENITY_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
+interface Room {
+  id: number;
+  type: string;
+  name: string;
+  size: string;
+  guests: number;
+  beds: string;
+  price: number;
+  description: string;
+  image: string;
+  gallery: string[];
+  amenities: string[];
+  facilities: { icon: string; label: string }[];
+  longDescription: string;
+}
+
 export default function RoomDetailPage() {
   const params = useParams();
   const roomId = Number(params.id);
-  const room = ROOMS.find((r) => r.id === roomId);
+  const [room, setRoom] = useState<Room | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://api.emeraldbayresorts.com/api/v1/rooms/${roomId}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch room: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Handle different API response structures
+        const apiRoom = data?.data || data;
+
+        // Get fallback room for default values
+        const fallbackRoom = FALLBACK_ROOMS.find((r) => r.id === roomId) || FALLBACK_ROOMS[0];
+
+        // Extract images/gallery
+        let gallery = fallbackRoom.gallery;
+        if (apiRoom.images && Array.isArray(apiRoom.images) && apiRoom.images.length > 0) {
+          // Map images array to URLs
+          gallery = apiRoom.images.map((img: any) => img.image_url || img.url || img);
+        } else if (apiRoom.image) {
+          // If only single image, create gallery from it
+          gallery = [apiRoom.image];
+        }
+
+        // Map API response to Room interface
+        const mappedRoom: Room = {
+          id: apiRoom.id || fallbackRoom.id,
+          image: apiRoom.image || gallery[0] || fallbackRoom.image,
+          name: apiRoom.title || apiRoom.name || fallbackRoom.name,
+          description: apiRoom.description || fallbackRoom.description,
+          price: apiRoom.price || fallbackRoom.price,
+          size: apiRoom.size || apiRoom.room_size || fallbackRoom.size,
+          gallery: gallery,
+          longDescription: apiRoom.long_description || apiRoom.description || fallbackRoom.longDescription,
+          // Keep these from fallback
+          type: apiRoom.type || fallbackRoom.type,
+          guests: apiRoom.guests || fallbackRoom.guests,
+          beds: apiRoom.beds || fallbackRoom.beds,
+          amenities: apiRoom.amenities || fallbackRoom.amenities,
+          facilities: apiRoom.facilities || fallbackRoom.facilities,
+        };
+
+        setRoom(mappedRoom);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch room:", err);
+        setError("Failed to load room details.");
+        // Try to use fallback
+        const fallbackRoom = FALLBACK_ROOMS.find((r) => r.id === roomId);
+        if (fallbackRoom) {
+          setRoom(fallbackRoom);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoom();
+  }, [roomId]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-white font-sans">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div style={{ textAlign: "center", padding: "80px 20px" }}>
+            <div style={{ fontFamily: "var(--font-playfair), serif", fontSize: "18px", color: "#B39977" }}>
+              Loading room details...
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Not found state
   if (!room) {
     return (
       <div className="flex flex-col min-h-screen bg-white font-sans">
@@ -265,6 +364,15 @@ export default function RoomDetailPage() {
           </div>
         </div>
 
+        {/* Error State */}
+        {error && (
+          <div style={{ backgroundColor: "#EDE6D9", padding: "20px" }}>
+            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px", backgroundColor: "rgba(255,200,200,0.2)", borderRadius: "8px", color: "#d64545" }}>
+              {error} Showing cached data.
+            </div>
+          </div>
+        )}
+
         {/* Content */}
         <section style={{ backgroundColor: "#fff", padding: "40px clamp(16px, 6vw, 80px)" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -298,7 +406,7 @@ export default function RoomDetailPage() {
                   }}
                 >
                   <img
-                    src={room.gallery[selectedImage]}
+                    src={room.gallery?.[selectedImage] || room.image}
                     alt={room.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
@@ -306,7 +414,7 @@ export default function RoomDetailPage() {
 
                 {/* Thumbnail Gallery */}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(60px, 1fr))", gap: "8px" }}>
-                  {room.gallery.map((img, idx) => (
+                  {room.gallery?.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedImage(idx)}
@@ -433,7 +541,7 @@ export default function RoomDetailPage() {
                     Room Facilities
                   </h3>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
-                    {room.facilities.map((facility, idx) => (
+                    {room.facilities?.map((facility, idx) => (
                       <div key={idx} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                         <span
                           style={{
