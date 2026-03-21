@@ -39,22 +39,50 @@ export default function AdminLogin() {
     return true;
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
-    
-    if (isEmailValid && isPasswordValid) {
-      // Navigate to admin dashboard
-      router.push("/admin/dashboard");
+
+    if (!isEmailValid || !isPasswordValid) return;
+
+    setIsLoading(true);
+    setApiError("");
+
+    try {
+      // Import API function dynamically to avoid issues
+      const { AUTH_API, apiFetch } = await import("@/lib/api");
+
+      const response = await apiFetch(AUTH_API.LOGIN, {
+        method: "POST",
+        data: { email, password },
+      });
+
+      if (response.token) {
+        // Store token in localStorage
+        localStorage.setItem("authToken", response.token);
+
+        // Navigate to admin dashboard
+        router.push("/admin/dashboard");
+      } else {
+        setApiError("Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setApiError("Login failed. Please check your credentials and try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center overflow-hidden">
       {/* Background Image with Dark Overlay */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: "url('/hotel-bg.jpeg')",
@@ -63,12 +91,12 @@ export default function AdminLogin() {
           backgroundRepeat: "no-repeat"
         }}
       >
-        
+
       </div>
 
       {/* Login Card */}
       <div className="relative z-10 w-full max-w-md px-6">
-        <div 
+        <div
           className="backdrop-blur-md rounded-3xl shadow-2xl p-8"
           style={{
             background: "linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)",
@@ -78,25 +106,25 @@ export default function AdminLogin() {
           {/* Logo and Branding */}
           <div className="flex flex-col items-center mb-8">
             {/* Logo Image */}
-            <div 
+            <div
               className="w-20 h-20 rounded-full flex items-center justify-center mb-4 overflow-hidden"
               style={{ backgroundColor: "rgba(179, 153, 119, 0.2)" }}
             >
-              <img 
-                src="/logo.png" 
-                alt="Emerald Bay Logo" 
+              <img
+                src="/logo.png"
+                alt="Emerald Bay Logo"
                 className="w-16 h-16 object-contain"
               />
             </div>
 
             {/* Hotel Name */}
-            <h1 
+            <h1
               className="text-2xl font-bold mb-1 tracking-wide"
               style={{ color: "#FFFFFF" }}
             >
               Emerald Bay Resort
             </h1>
-            <p 
+            <p
               className="text-xs tracking-widest mb-6"
               style={{ color: "#B39977" }}
             >
@@ -104,13 +132,13 @@ export default function AdminLogin() {
             </p>
 
             {/* Admin Portal Title */}
-            <h2 
+            <h2
               className="text-xl font-semibold mb-1"
               style={{ color: "#FFFFFF" }}
             >
               Admin Portal
             </h2>
-            <p 
+            <p
               className="text-xs"
               style={{ color: "rgba(255, 255, 255, 0.5)" }}
             >
@@ -122,8 +150,8 @@ export default function AdminLogin() {
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email Input */}
             <div>
-              <label 
-                htmlFor="email" 
+              <label
+                htmlFor="email"
                 className="block text-xs font-medium mb-2 tracking-wide"
                 style={{ color: "#FFFF" }}
               >
@@ -131,11 +159,11 @@ export default function AdminLogin() {
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <svg 
-                    width="18" 
-                    height="18" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
                     stroke="#B39977"
                     strokeWidth="2"
                   >
@@ -170,8 +198,8 @@ export default function AdminLogin() {
 
             {/* Password Input */}
             <div>
-              <label 
-                htmlFor="password" 
+              <label
+                htmlFor="password"
                 className="block text-xs font-medium mb-2 tracking-wide"
                 style={{ color: "#FFFF" }}
               >
@@ -179,11 +207,11 @@ export default function AdminLogin() {
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <svg 
-                    width="18" 
-                    height="18" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
                     stroke="#B39977"
                     strokeWidth="2"
                   >
@@ -215,11 +243,11 @@ export default function AdminLogin() {
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 transition-opacity hover:opacity-70"
                 >
                   {showPassword ? (
-                    <svg 
-                      width="20" 
-                      height="20" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
                       stroke="rgba(255, 255, 255, 0.4)"
                       strokeWidth="2"
                     >
@@ -227,11 +255,11 @@ export default function AdminLogin() {
                       <circle cx="12" cy="12" r="3" />
                     </svg>
                   ) : (
-                    <svg 
-                      width="20" 
-                      height="20" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
                       stroke="rgba(255, 255, 255, 0.4)"
                       strokeWidth="2"
                     >
@@ -260,15 +288,15 @@ export default function AdminLogin() {
                     accentColor: "#B39977"
                   }}
                 />
-                <span 
+                <span
                   className="ml-2 text-sm transition-opacity group-hover:opacity-70"
                   style={{ color: "#FFFF" }}
                 >
                   Remember Me
                 </span>
               </label>
-              <a 
-                href="#forgot-password" 
+              <a
+                href="#forgot-password"
                 className="text-sm transition-opacity hover:opacity-70"
                 style={{ color: "#B39977" }}
               >
@@ -276,45 +304,77 @@ export default function AdminLogin() {
               </a>
             </div>
 
+            {/* API Error Message */}
+            {apiError && (
+              <div
+                className="p-3 rounded-lg text-sm flex items-center gap-2"
+                style={{
+                  backgroundColor: "rgba(239, 68, 68, 0.15)",
+                  border: "1px solid #EF4444",
+                  color: "#FCA5A5"
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {apiError}
+              </div>
+            )}
+
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              disabled={isLoading}
+              className="w-full py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: "#B39977",
                 color: "#FFFFFF"
               }}
             >
-              Secure Login
-              <svg 
-                width="18" 
-                height="18" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
+              {isLoading ? (
+                <>
+                  <svg width="16" height="16" className="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2v4M12 18v4M22 12h-4M4 12H0" />
+                  </svg>
+                  Authenticating...
+                </>
+              ) : (
+                <>
+                  Secure Login
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </>
+              )}
             </button>
 
             {/* Encrypted Session Badge */}
             <div className="flex items-center justify-center gap-2 pt-2">
-              <svg 
-                width="14" 
-                height="14" 
-                viewBox="0 0 24 24" 
-                fill="none" 
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
                 stroke="rgba(255, 255, 255, 0.3)"
                 strokeWidth="2"
               >
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 6v6l4 2" />
               </svg>
-              <span 
+              <span
                 className="text-xs tracking-wider"
                 style={{ color: "rgba(255, 255, 255, 0.3)" }}
               >
@@ -322,22 +382,22 @@ export default function AdminLogin() {
               </span>
             </div>
             {/* Footer Links */}
-        <div className="flex items-center justify-center gap-8 mt-8">
-          {["PRIVACY", "TERMS", "SUPPORT"].map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              className="text-xs tracking-widest transition-opacity hover:opacity-70"
-              style={{ color: "#B39977" }}
-            >
-              {link}
-            </a>
-          ))}
-        </div>
+            <div className="flex items-center justify-center gap-8 mt-8">
+              {["PRIVACY", "TERMS", "SUPPORT"].map((link) => (
+                <a
+                  key={link}
+                  href={`#${link.toLowerCase()}`}
+                  className="text-xs tracking-widest transition-opacity hover:opacity-70"
+                  style={{ color: "#B39977" }}
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
           </form>
         </div>
 
-        
+
       </div>
     </div>
   );
