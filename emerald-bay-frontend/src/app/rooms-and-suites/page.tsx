@@ -437,9 +437,12 @@ export default function RoomsAndSuitesPage() {
                           <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "11px", fontWeight: 400, color: "#8a6a3a" }}> /night</span>
                         </div>
                       </div>
-                      <button
-                        className="book-btn"
+                      <Link
+                        href={`/rooms-and-suites/${room.id}`}
                         style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                           backgroundColor: "#B39977",
                           color: "#fff",
                           border: "none",
@@ -455,10 +458,12 @@ export default function RoomsAndSuitesPage() {
                           textTransform: "uppercase",
                           cursor: "pointer",
                           whiteSpace: "nowrap",
+                          textDecoration: "none",
                         }}
+                        className="book-btn"
                       >
                         Book Now
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
