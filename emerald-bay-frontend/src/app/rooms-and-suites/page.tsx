@@ -255,10 +255,10 @@ export default function RoomsAndSuitesPage() {
             .rooms-hero-line { opacity:0; animation: roomsLineGrow 0.7s ease 1.0s forwards; }
             .rooms-hero-sub  { opacity:0; animation: roomsFadeUp 0.7s ease 1.15s forwards; }
 
-            .room-card { transition: box-shadow 0.25s, transform 0.25s; }
-            .room-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.13); }
-            .book-btn { transition: background 0.2s, transform 0.15s; }
-            .book-btn:hover { background: #9a7a58 !important; transform: scale(1.03); }
+            .room-card { transition: box-shadow 0.3s, transform 0.3s; }
+            .room-card:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(0,0,0,0.14); }
+            .book-btn { transition: background 0.25s, transform 0.2s, box-shadow 0.25s; }
+            .book-btn:hover { background: #9a7a58 !important; transform: scale(1.04); box-shadow: 0 4px 16px rgba(179,153,119,0.4); }
 
             @media (max-width: 768px) {
               .rooms-hero-h1-text { font-size: 28px !important; }
@@ -275,7 +275,7 @@ export default function RoomsAndSuitesPage() {
               className="rooms-bg"
               style={{
                 position: "absolute", inset: 0,
-                backgroundImage: "url(/hotel-bg.jpeg)",
+                backgroundImage: "url(https://i.pinimg.com/1200x/4c/c0/44/4cc04425f101576d800c81dea594b22e.jpg)",
                 backgroundSize: "cover", backgroundPosition: "center",
               }}
             />
@@ -316,10 +316,10 @@ export default function RoomsAndSuitesPage() {
               <h1
                 className="rooms-hero-h1 rooms-hero-h1-text"
                 style={{
-                  fontFamily: "var(--font-playfair), 'Playfair Display', Georgia, serif",
-                  fontSize: "clamp(32px, 4.5vw, 62px)", fontWeight: 600, fontStyle: "italic",
-                  color: "#fff", letterSpacing: "0.02em", margin: 0, lineHeight: 1.2,
-                  textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+                  fontFamily: "var(--font-dm-serif), 'DM Serif Display', Georgia, serif",
+                  fontSize: "clamp(36px, 5vw, 68px)", fontWeight: 400,
+                  color: "#fff", letterSpacing: "0.03em", margin: 0, lineHeight: 1.15,
+                  textShadow: "0 3px 24px rgba(0,0,0,0.55)",
                 }}
               >
                 Rooms &amp; Suites
@@ -350,16 +350,16 @@ export default function RoomsAndSuitesPage() {
         </section>
 
         {/* ── Section Header ───────────────────────────────────── */}
-        <section style={{ backgroundColor: "#EDE6D9", padding: "60px clamp(16px, 6vw, 80px) 20px" }}>
+        <section style={{ backgroundColor: "#EDE6D9", padding: "70px clamp(16px, 6vw, 80px) 24px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-            <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "11px", letterSpacing: "0.3em", color: "#B39977", textTransform: "uppercase", marginBottom: "10px" }}>
+            <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "11px", letterSpacing: "0.35em", color: "#B39977", textTransform: "uppercase", marginBottom: "12px" }}>
               Choose Your Stay
             </p>
-            <h2 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(26px, 3vw, 40px)", fontWeight: 600, fontStyle: "italic", color: "#2a1a0e", margin: 0 }}>
+            <h2 style={{ fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif", fontSize: "clamp(28px, 3.2vw, 44px)", fontWeight: 400, color: "#2a1a0e", margin: 0, letterSpacing: "0.01em" }}>
               Discover Our Rooms
             </h2>
-            <div style={{ width: "48px", height: "2px", background: "linear-gradient(90deg, #d4a853, #f5e6b8, #d4a853)", margin: "14px auto 0", borderRadius: "1px" }} />
-            <p style={{ fontFamily: "var(--font-geist-sans), sans-serif", fontSize: "15px", color: "rgba(60,40,20,0.65)", maxWidth: "580px", margin: "16px auto 0", lineHeight: 1.7 }}>
+            <div style={{ width: "52px", height: "2px", background: "linear-gradient(90deg, #d4a853, #f5e6b8, #d4a853)", margin: "16px auto 0", borderRadius: "1px" }} />
+            <p style={{ fontFamily: "var(--font-geist-sans), sans-serif", fontSize: "15px", color: "rgba(60,40,20,0.68)", maxWidth: "620px", margin: "20px auto 0", lineHeight: 1.75 }}>
               Each room is thoughtfully designed to offer elegance, comfort, and a true sense of the tropics — framed by ocean views and lush greenery.
             </p>
           </div>
@@ -384,10 +384,10 @@ export default function RoomsAndSuitesPage() {
 
         {/* ── Rooms Grid ───────────────────────────────────────── */}
         {!loading && (
-          <section style={{ backgroundColor: "#EDE6D9", padding: "40px clamp(16px, 6vw, 80px) 80px" }}>
+          <section style={{ backgroundColor: "#EDE6D9", padding: "48px clamp(16px, 6vw, 80px) 90px" }}>
             <div
               className="rooms-grid"
-              style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "28px" }}
+              style={{ maxWidth: "1240px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}
             >
               {rooms.map((room) => {
               const badge = BADGE_COLORS[room.type] ?? BADGE_COLORS.STANDARD;
@@ -397,9 +397,9 @@ export default function RoomsAndSuitesPage() {
                   className="room-card"
                   style={{
                     backgroundColor: "#fff",
-                    borderRadius: "16px",
+                    borderRadius: "18px",
                     overflow: "hidden",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+                    boxShadow: "0 6px 28px rgba(0,0,0,0.09)",
                     display: "flex",
                     flexDirection: "column",
                   }}
@@ -446,7 +446,7 @@ export default function RoomsAndSuitesPage() {
                   </div>
 
                   {/* Content */}
-                  <div style={{ padding: "22px 24px 24px", flex: 1, display: "flex", flexDirection: "column" }}>
+                  <div style={{ padding: "24px 26px 26px", flex: 1, display: "flex", flexDirection: "column" }}>
                     {/* Room meta */}
                     <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "10px" }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: "#8a6a3a" }}>
@@ -473,25 +473,26 @@ export default function RoomsAndSuitesPage() {
                     {/* Room name */}
                     <h3
                       style={{
-                        fontFamily: "var(--font-playfair), serif",
-                        fontSize: "clamp(17px, 1.5vw, 21px)",
-                        fontWeight: 600,
+                        fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif",
+                        fontSize: "clamp(18px, 1.6vw, 23px)",
+                        fontWeight: 400,
                         color: "#2a1a0e",
-                        margin: "0 0 4px",
-                        lineHeight: 1.3,
+                        margin: "0 0 6px",
+                        lineHeight: 1.25,
+                        letterSpacing: "0.01em",
                       }}
                     >
                       {room.name}
                     </h3>
-                    <div style={{ width: "32px", height: "1.5px", background: "linear-gradient(90deg, #d4a853, transparent)", marginBottom: "10px" }} />
+                    <div style={{ width: "36px", height: "2px", background: "linear-gradient(90deg, #d4a853, rgba(212,168,83,0.3))", marginBottom: "12px" }} />
 
                     {/* Description */}
                     <p
                       style={{
                         fontSize: "13.5px",
-                        color: "rgba(60,40,20,0.62)",
-                        lineHeight: 1.65,
-                        margin: "0 0 18px",
+                        color: "rgba(60,40,20,0.65)",
+                        lineHeight: 1.7,
+                        margin: "0 0 20px",
                         flex: 1,
                       }}
                     >
@@ -499,17 +500,18 @@ export default function RoomsAndSuitesPage() {
                     </p>
 
                     {/* Amenity icons */}
-                    <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "20px" }}>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "22px" }}>
                       {room.amenities?.map((a) => (
                         <span
                           key={a}
                           style={{
-                            width: "34px", height: "34px",
-                            borderRadius: "8px",
-                            backgroundColor: "rgba(179,153,119,0.1)",
+                            width: "36px", height: "36px",
+                            borderRadius: "10px",
+                            backgroundColor: "rgba(179,153,119,0.08)",
                             color: "#B39977",
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            border: "1px solid rgba(179,153,119,0.2)",
+                            border: "1px solid rgba(179,153,119,0.18)",
+                            transition: "background-color 0.2s, transform 0.2s",
                           }}
                         >
                           {AMENITY_ICONS[a]}
@@ -526,7 +528,7 @@ export default function RoomsAndSuitesPage() {
                         <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "10px", color: "#B39977", letterSpacing: "0.15em", textTransform: "uppercase" }}>
                           from
                         </span>
-                        <div style={{ fontFamily: "var(--font-playfair), serif", fontSize: "22px", fontWeight: 700, color: "#2a1a0e", lineHeight: 1 }}>
+                      <div style={{ fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif", fontSize: "24px", fontWeight: 400, color: "#2a1a0e", lineHeight: 1 }}>
                           ${room.price}
                           <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "11px", fontWeight: 400, color: "#8a6a3a" }}> /night</span>
                         </div>
@@ -578,7 +580,7 @@ export default function RoomsAndSuitesPage() {
             <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "11px", letterSpacing: "0.3em", color: "#d4a853", textTransform: "uppercase", marginBottom: "10px" }}>
               Every Room Includes
             </p>
-            <h2 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(22px, 2.5vw, 34px)", fontWeight: 600, fontStyle: "italic", color: "#EDE6D9", margin: "0 0 40px" }}>
+            <h2 style={{ fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif", fontSize: "clamp(24px, 2.8vw, 38px)", fontWeight: 400, color: "#EDE6D9", margin: "0 0 44px", letterSpacing: "0.01em" }}>
               Included Amenities
             </h2>
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "28px 48px" }}>

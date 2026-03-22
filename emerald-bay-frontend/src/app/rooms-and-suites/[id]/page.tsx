@@ -395,9 +395,9 @@ export default function RoomDetailPage() {
             {/* Page Title */}
             <h1
               style={{
-                fontFamily: "var(--font-playfair), serif",
+                fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif",
                 fontSize: "clamp(24px, 2.5vw, 38px)",
-                fontWeight: 600,
+                fontWeight: 400,
                 color: "#2a1a0e",
                 marginBottom: "40px",
                 marginTop: 0,
