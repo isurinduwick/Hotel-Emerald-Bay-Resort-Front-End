@@ -390,19 +390,19 @@ export default function RoomDetailPage() {
               Room View &amp; Details
             </h1>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", alignItems: "start" }}>
-              {/* Left: Image Gallery */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "40px", alignItems: "start" }}>
+              {/* Left Column: Main Content */}
               <div>
                 {/* Main Image */}
                 <div
                   style={{
                     position: "relative",
                     width: "100%",
-                    aspectRatio: "4/3",
-                    borderRadius: "12px",
+                    aspectRatio: "16/9",
+                    borderRadius: "16px",
                     overflow: "hidden",
                     marginBottom: "16px",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                   }}
                 >
                   <img
@@ -413,213 +413,333 @@ export default function RoomDetailPage() {
                 </div>
 
                 {/* Thumbnail Gallery */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(60px, 1fr))", gap: "8px" }}>
-                  {room.gallery?.map((img, idx) => (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "32px" }}>
+                  {room.gallery?.slice(0, 4).map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedImage(idx)}
                       style={{
-                        border: selectedImage === idx ? "2px solid #B39977" : "1px solid rgba(0,0,0,0.1)",
-                        borderRadius: "6px",
+                        border: selectedImage === idx ? "3px solid #B39977" : "2px solid #e5e0d8",
+                        borderRadius: "10px",
                         padding: 0,
                         cursor: "pointer",
-                        aspectRatio: "1",
+                        aspectRatio: "16/9",
                         overflow: "hidden",
-                        transition: "border 0.2s",
+                        transition: "all 0.3s ease",
+                        boxShadow: selectedImage === idx ? "0 4px 12px rgba(179,153,119,0.3)" : "none",
+                        opacity: selectedImage === idx ? 1 : 0.7,
+                        background: "none",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedImage !== idx) {
+                          e.currentTarget.style.opacity = "1";
+                          e.currentTarget.style.borderColor = "#B39977";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedImage !== idx) {
+                          e.currentTarget.style.opacity = "0.7";
+                          e.currentTarget.style.borderColor = "#e5e0d8";
+                        }
                       }}
                     >
                       <img
                         src={img}
-                        alt={`View ${idx + 1}`}
+                        alt={`Room view ${idx + 1}`}
                         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                       />
                     </button>
                   ))}
                 </div>
-              </div>
 
-              {/* Right: Room Details & Booking */}
-              <div>
-                {/* Room Type Badge */}
-                <div
-                  style={{
-                    display: "inline-block",
-                    backgroundColor: "#EDE6D9",
-                    color: "#8a6a3a",
-                    padding: "6px 14px",
-                    borderRadius: "20px",
-                    fontFamily: "var(--font-cinzel), serif",
-                    fontSize: "10px",
-                    fontWeight: 600,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    marginBottom: "12px",
-                  }}
-                >
-                  {room.type}
-                </div>
-
-                {/* Room Name */}
+                {/* Room Title */}
                 <h2
                   style={{
                     fontFamily: "var(--font-playfair), serif",
-                    fontSize: "clamp(22px, 2vw, 32px)",
-                    fontWeight: 600,
-                    color: "#2a1a0e",
+                    fontSize: "32px",
+                    fontWeight: 700,
+                    color: "#1a1a1a",
                     marginTop: 0,
-                    marginBottom: "8px",
+                    marginBottom: "12px",
                     lineHeight: 1.3,
                   }}
                 >
                   {room.name}
                 </h2>
 
-                <div style={{ width: "40px", height: "2px", background: "#B39977", marginBottom: "20px" }} />
+                {/* Room Description */}
+                <p style={{
+                  fontSize: "14px",
+                  color: "#666",
+                  lineHeight: 1.6,
+                  marginBottom: "24px",
+                  marginTop: 0,
+                }}>
+                  {room.description}
+                </p>
 
-                {/* Price */}
+                {/* Price and Room Meta Row */}
+                <div style={{ display: "flex", alignItems: "center", gap: "32px", marginBottom: "20px", flexWrap: "wrap" }}>
+                  {/* Price */}
+                  <div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
+                      <span style={{ fontSize: "32px", fontWeight: 700, color: "#B39977" }}>{room.price}</span>
+                      <span style={{ fontSize: "16px", fontWeight: 500, color: "#B39977" }}>USD</span>
+                    </div>
+                    <div style={{ fontSize: "13px", color: "#888" }}>Per night</div>
+                  </div>
+
+                  {/* Divider */}
+                  <div style={{ width: "1px", height: "40px", backgroundColor: "#e0e0e0" }} />
+
+                  {/* Room Meta */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#555" }}>
+                    <span>{room.beds}</span>
+                    <span style={{ color: "#ccc" }}>•</span>
+                    <span>{room.guests} Adults</span>
+                    <span style={{ color: "#ccc" }}>•</span>
+                    <span>{room.size}</span>
+                  </div>
+                </div>
+
+                {/* Book Now Button */}
+                <button
+                  style={{
+                    backgroundColor: "#5a4a3a",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    padding: "12px 28px",
+                    marginBottom: "32px",
+                    fontFamily: "var(--font-cinzel), serif",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#4a3a2a";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "#5a4a3a";
+                  }}
+                >
+                  BOOK NOW
+                </button>
+
+                {/* Room Only Basis Section */}
                 <div style={{ marginBottom: "24px" }}>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-cinzel), serif",
-                      fontSize: "11px",
-                      color: "#B39977",
-                      letterSpacing: "0.15em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Starting from
-                  </span>
-                  <div style={{ fontSize: "36px", fontWeight: 700, color: "#2a1a0e", lineHeight: 1 }}>
-                    ${room.price}{" "}
-                    <span style={{ fontSize: "14px", fontWeight: 400, color: "#8a6a3a" }}>USD</span>
+                  <div style={{ fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", fontWeight: 600 }}>
+                    Room Only Basis - <span style={{ color: "#B39977" }}>EMERALD BAY RESORT</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13px", color: "#4CAF50", marginTop: "8px" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginTop: "2px", flexShrink: 0 }}>
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Free cancellation up to 2:00 PM on day of arrival</span>
                   </div>
                 </div>
 
-                {/* Room Meta */}
-                <div style={{ display: "flex", gap: "16px", marginBottom: "24px", flexWrap: "wrap" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#8a6a3a" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                      <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
-                    {room.size}
+                {/* Exclusive Benefits */}
+                <div style={{ marginBottom: "32px" }}>
+                  <div style={{ fontSize: "14px", color: "#1a1a1a", marginBottom: "8px", fontWeight: 500 }}>
+                    Exclusive benefits include
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#8a6a3a" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M23 21v-2a4 4 0 00-3-3.87" />
-                      <path d="M16 3.13a4 4 0 010 7.75" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#4CAF50" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <polyline points="20 6 9 17 4 12" />
                     </svg>
-                    Up to {room.guests} Guests
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#8a6a3a" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M2 4v16M2 8h18a2 2 0 012 2v8H2" />
-                      <path d="M2 14h20" />
-                      <path d="M6 8v6M16 8v2" />
-                    </svg>
-                    {room.beds}
+                    <span>3 kid stay free</span>
                   </div>
                 </div>
 
-                {/* Divider */}
-                <div style={{ height: "1px", background: "rgba(0,0,0,0.1)", marginBottom: "24px" }} />
+                {/* Calendar and Breakfast Row */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                  {/* Calendar */}
+                  <div style={{
+                    backgroundColor: "#fff",
+                    border: "1px solid #e5e0d8",
+                    borderRadius: "12px",
+                    padding: "20px",
+                  }}>
+                    <div style={{ fontSize: "13px", color: "#1a1a1a", marginBottom: "16px", fontWeight: 500 }}>
+                      Calendar
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                      <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#999", fontSize: "16px" }}>
+                        ‹
+                      </button>
+                      <div style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a" }}>
+                        July <span style={{ color: "#B39977" }}>2025</span>
+                      </div>
+                      <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#999", fontSize: "16px" }}>
+                        ›
+                      </button>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "2px", textAlign: "center" }}>
+                      {["M", "T", "W", "T", "F", "S", "S"].map((day, idx) => (
+                        <div key={idx} style={{ fontSize: "11px", fontWeight: 500, color: "#999", padding: "6px 0" }}>
+                          {day}
+                        </div>
+                      ))}
+                      {/* Empty cells for alignment */}
+                      <div />
+                      {[...Array(31)].map((_, i) => {
+                        const date = i + 1;
+                        const isToday = date === 15;
+                        return (
+                          <div
+                            key={i}
+                            style={{
+                              fontSize: "11px",
+                              padding: "6px 4px",
+                              borderRadius: "4px",
+                              backgroundColor: isToday ? "#B39977" : "transparent",
+                              color: isToday ? "#fff" : "#333",
+                              cursor: "pointer",
+                              fontWeight: isToday ? 600 : 400,
+                            }}
+                          >
+                            {date}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                {/* Room Facilities */}
-                <div style={{ marginBottom: "28px" }}>
+                  {/* Breakfast Image */}
+                  <div style={{
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}>
+                    <img
+                      src="/breakfast.jpg"
+                      alt="Complimentary Breakfast"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: "200px" }}
+                      onError={(e) => {
+                        e.currentTarget.src = room.gallery?.[1] || room.image;
+                      }}
+                    />
+                    <div style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background: "linear-gradient(transparent, rgba(0,0,0,0.75))",
+                      padding: "30px 16px 16px",
+                    }}>
+                      <div style={{
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        color: "#fff",
+                        lineHeight: 1.4,
+                      }}>
+                        We provide you Complimentary Break Fast with this room.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Room Facilities & Compare Prices */}
+              <div>
+                {/* Room Facilities Section */}
+                <div style={{
+                  background: "linear-gradient(180deg, rgba(217,219,237,0.75) 0%, rgba(237,230,217,1) 54%, rgba(237,230,217,0.5) 100%)",
+                  border: "1px solid #e5e0d8",
+                  borderRadius: "12px",
+                  padding: "24px",
+                  marginBottom: "20px",
+                }}>
                   <h3
                     style={{
                       fontFamily: "var(--font-playfair), serif",
-                      fontSize: "16px",
+                      fontSize: "18px",
                       fontWeight: 600,
-                      color: "#2a1a0e",
-                      marginBottom: "16px",
+                      color: "#1a1a1a",
                       marginTop: 0,
+                      marginBottom: "20px",
                     }}
                   >
                     Room Facilities
                   </h3>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
-                    {room.facilities?.map((facility, idx) => (
-                      <div key={idx} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    {[
+                      { icon: "ac", label: "Air Condition", sublabel: "Cool Comfort" },
+                      { icon: "wifi", label: "Speed Wifi", sublabel: "High-Speed WiFi" },
+                      { icon: "breakfast", label: "Breakfast", sublabel: "Complimentary Breakfast" },
+                      { icon: "pool", label: "Rooftop Pool", sublabel: "Skyline Pool" },
+                      { icon: "bed", label: "Bathroom Amenities", sublabel: "Premium Amenities" },
+                      { icon: "gym", label: "Room Security", sublabel: "Secure Access" },
+                    ].map((facility, idx) => (
+                      <div key={idx} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                         <span
                           style={{
-                            width: "32px",
-                            height: "32px",
-                            borderRadius: "6px",
-                            backgroundColor: "rgba(179,153,119,0.1)",
+                            width: "44px",
+                            height: "44px",
+                            borderRadius: "50%",
+                            backgroundColor: "#f5f3f0",
                             color: "#B39977",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            border: "1px solid rgba(179,153,119,0.2)",
                             flexShrink: 0,
                           }}
                         >
                           {AMENITY_ICONS[facility.icon]}
                         </span>
-                        <span style={{ fontSize: "12px", color: "#8a6a3a" }}>{facility.label}</span>
+                        <div>
+                          <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>{facility.label}</div>
+                          <div style={{ fontSize: "11px", color: "#888" }}>{facility.sublabel}</div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Divider */}
-                <div style={{ height: "1px", background: "rgba(0,0,0,0.1)", marginBottom: "24px" }} />
+                {/* Compare Prices Section */}
+                <div style={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e0d8",
+                  borderRadius: "12px",
+                  padding: "24px",
+                }}>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-playfair), serif",
+                      fontSize: "18px",
+                      fontWeight: 600,
+                      color: "#1a1a1a",
+                      marginTop: 0,
+                      marginBottom: "20px",
+                    }}
+                  >
+                    Compare Prices
+                  </h3>
 
-                {/* Booking Section */}
-                <div style={{ backgroundColor: "#EDE6D9", padding: "20px", borderRadius: "10px", marginBottom: "20px" }}>
-                  <div style={{ marginBottom: "16px" }}>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-playfair), serif",
-                        fontSize: "16px",
-                        fontWeight: 600,
-                        color: "#2a1a0e",
-                        marginTop: 0,
-                        marginBottom: "12px",
-                      }}
-                    >
-                      Book Direct
-                    </h3>
-                    <div style={{ fontSize: "13px", color: "#8a6a3a", lineHeight: 1.6 }}>
-                      <div>Contact for more details:</div>
-                      <div style={{ fontFamily: "var(--font-cinzel), serif", fontWeight: 600, marginTop: "4px" }}>
-                        +94 77 222 0228
-                      </div>
-                    </div>
+                  {/* Book Direct */}
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "12px",
+                  }}>
+                    <span style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a" }}>Book Direct</span>
+                    <span style={{ fontSize: "18px", fontWeight: 700, color: "#B39977" }}>{room.price} <span style={{ fontSize: "12px" }}>USD</span></span>
                   </div>
 
-                  <div style={{ height: "1px", background: "rgba(0,0,0,0.1)", marginBottom: "16px" }} />
-
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px", font: "13px", color: "#8a6a3a" }}>
-                    <div>
-                      <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "4px" }}>
-                        Booking.com
-                      </div>
-                      <div>450 USD</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "4px" }}>
-                        Agoda
-                      </div>
-                      <div>450 USD</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "4px" }}>
-                        Expedia
-                      </div>
-                      <div>400 USD</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "4px" }}>
-                        Hotels.com
-                      </div>
-                      <div>400 USD</div>
-                    </div>
+                  {/* Contact Info */}
+                  <div style={{ fontSize: "12px", color: "#888", marginBottom: "4px" }}>
+                    Contact us for more details
+                  </div>
+                  <div style={{ fontSize: "14px", color: "#B39977", fontWeight: 600, marginBottom: "16px" }}>
+                    +94 77 212 0231
                   </div>
 
+                  {/* Email Booking Button */}
                   <button
                     style={{
                       width: "100%",
@@ -628,48 +748,46 @@ export default function RoomDetailPage() {
                       border: "none",
                       borderRadius: "6px",
                       padding: "12px",
-                      marginTop: "16px",
+                      marginBottom: "20px",
                       fontFamily: "var(--font-cinzel), serif",
                       fontSize: "11px",
                       fontWeight: 600,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
                       cursor: "pointer",
-                      transition: "background 0.2s",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#9a7a58")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "#B39977")}
                   >
-                    Email Booking
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    Email this Booking
                   </button>
-                </div>
 
-                {/* Compare Prices Button */}
-                <button
-                  style={{
-                    width: "100%",
-                    backgroundColor: "transparent",
-                    color: "#8a6a3a",
-                    border: "1px solid #B39977",
-                    borderRadius: "6px",
-                    padding: "10px",
-                    fontFamily: "var(--font-cinzel), serif",
-                    fontSize: "11px",
-                    fontWeight: 600,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#EDE6D9";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  Compare Prices
-                </button>
+                  {/* OTA Prices */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                    {[
+                      { name: "Booking.com", price: "450" },
+                      { name: "Agoda", price: "450" },
+                      { name: "Expedia", price: "450" },
+                      { name: "Hotels.com", price: "450" },
+                    ].map((ota, idx) => (
+                      <div key={idx} style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 0",
+                        borderBottom: idx < 3 ? "1px solid #f0ebe4" : "none",
+                      }}>
+                        <span style={{ fontSize: "13px", color: "#555" }}>{ota.name}</span>
+                        <span style={{ fontSize: "13px", fontWeight: 600, color: "#333" }}>{ota.price} <span style={{ fontSize: "11px", color: "#888" }}>USD</span></span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
