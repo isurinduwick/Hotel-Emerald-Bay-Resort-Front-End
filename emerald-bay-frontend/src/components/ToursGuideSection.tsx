@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const tours = [
   { id: 1, image: "/safariimg.jpg", name: "Mirissa Kayak Safari Tours" },
@@ -16,6 +17,7 @@ const sideImages = [
 ];
 
 export default function ToursGuideSection() {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent((c) => (c - 1 + tours.length) % tours.length);
@@ -288,6 +290,7 @@ export default function ToursGuideSection() {
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(186,158,122,0.4)"; e.currentTarget.style.borderColor = "#ba9e7a"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; }}
+                onClick={() => router.push("/tours")}
               >
                 Discover More
               </button>
