@@ -56,7 +56,7 @@ const SERVICES: ServiceData[] = [
     tagline: "We look forward to welcoming you.",
   },
   {
-    imageSrc: "/laundry.png",
+    imageSrc: "/Laundry.jpg",
     title: "LAUNDRY",
     subtitle: "Fresh & Clean",
     description:
