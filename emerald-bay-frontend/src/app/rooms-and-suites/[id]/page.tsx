@@ -343,23 +343,115 @@ export default function RoomDetailPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans overflow-x-hidden">
+      {/* Mobile-optimized responsive styles */}
+      <style jsx>{`
+        .main-grid {
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          gap: 40px;
+          align-items: start;
+        }
+        .calendar-breakfast-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        .thumbnail-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+          margin-bottom: 32px;
+        }
+        .room-meta-row {
+          display: flex;
+          align-items: center;
+          gap: 32px;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+        .room-meta-divider {
+          width: 1px;
+          height: 40px;
+          background-color: #e0e0e0;
+        }
+        .breadcrumb-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .facilities-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .right-column {
+          order: 0;
+        }
+        @media (max-width: 1024px) {
+          .main-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+          }
+          .right-column {
+            order: 1;
+          }
+          .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+        }
+        @media (max-width: 768px) {
+          .calendar-breakfast-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .thumbnail-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+          }
+          .room-meta-row {
+            gap: 16px;
+          }
+          .room-meta-divider {
+            display: none;
+          }
+          .facilities-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+          }
+        }
+        @media (max-width: 480px) {
+          .thumbnail-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+          }
+          .breadcrumb-container {
+            font-size: 10px;
+          }
+          .facilities-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+        }
+      `}</style>
       <Navbar />
 
       <main className="flex-1 w-full mt-[60px]">
         {/* Breadcrumb */}
         <div
           style={{
-            padding: "20px clamp(16px, 6vw, 80px)",
+            padding: "16px clamp(12px, 4vw, 80px)",
             backgroundColor: "#EDE6D9",
             borderBottom: "1px solid rgba(0,0,0,0.08)",
           }}
         >
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div
+              className="breadcrumb-container"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
                 fontFamily: "var(--font-cinzel), serif",
                 fontSize: "11px",
                 color: "rgba(60,40,20,0.6)",
@@ -390,23 +482,23 @@ export default function RoomDetailPage() {
         )}
 
         {/* Content */}
-        <section style={{ backgroundColor: "#fff", padding: "40px clamp(16px, 6vw, 80px)" }}>
+        <section style={{ backgroundColor: "#fff", padding: "clamp(24px, 5vw, 40px) clamp(12px, 4vw, 80px)" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             {/* Page Title */}
             <h1
               style={{
                 fontFamily: "var(--font-dm-serif), 'DM Serif Display', serif",
-                fontSize: "clamp(24px, 2.5vw, 38px)",
+                fontSize: "clamp(22px, 2.5vw, 38px)",
                 fontWeight: 400,
                 color: "#2a1a0e",
-                marginBottom: "40px",
+                marginBottom: "clamp(24px, 4vw, 40px)",
                 marginTop: 0,
               }}
             >
               Room View &amp; Details
             </h1>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "40px", alignItems: "start" }}>
+            <div className="main-grid">
               {/* Left Column: Main Content */}
               <div>
                 {/* Main Image */}
@@ -429,7 +521,7 @@ export default function RoomDetailPage() {
                 </div>
 
                 {/* Thumbnail Gallery */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "32px" }}>
+                <div className="thumbnail-grid">
                   {room.gallery?.slice(0, 4).map((img, idx) => (
                     <button
                       key={idx}
@@ -472,7 +564,7 @@ export default function RoomDetailPage() {
                 <h2
                   style={{
                     fontFamily: "var(--font-playfair), serif",
-                    fontSize: "32px",
+                    fontSize: "clamp(24px, 4vw, 32px)",
                     fontWeight: 700,
                     color: "#1a1a1a",
                     marginTop: 0,
@@ -495,21 +587,21 @@ export default function RoomDetailPage() {
                 </p>
 
                 {/* Price and Room Meta Row */}
-                <div style={{ display: "flex", alignItems: "center", gap: "32px", marginBottom: "20px", flexWrap: "wrap" }}>
+                <div className="room-meta-row">
                   {/* Price */}
                   <div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-                      <span style={{ fontSize: "32px", fontWeight: 700, color: "#B39977" }}>{room.price}</span>
-                      <span style={{ fontSize: "16px", fontWeight: 500, color: "#B39977" }}>USD</span>
+                      <span style={{ fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, color: "#B39977" }}>{room.price}</span>
+                      <span style={{ fontSize: "clamp(14px, 2vw, 16px)", fontWeight: 500, color: "#B39977" }}>USD</span>
                     </div>
                     <div style={{ fontSize: "13px", color: "#888" }}>Per night</div>
                   </div>
 
                   {/* Divider */}
-                  <div style={{ width: "1px", height: "40px", backgroundColor: "#e0e0e0" }} />
+                  <div className="room-meta-divider" />
 
                   {/* Room Meta */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "#555" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "clamp(12px, 2vw, 14px)", color: "#555", flexWrap: "wrap" }}>
                     <span>{room.beds}</span>
                     <span style={{ color: "#ccc" }}>•</span>
                     <span>{room.guests} Adults</span>
@@ -525,7 +617,7 @@ export default function RoomDetailPage() {
                     color: "#fff",
                     border: "none",
                     borderRadius: "6px",
-                    padding: "12px 28px",
+                    padding: "14px 28px",
                     marginBottom: "32px",
                     fontFamily: "var(--font-cinzel), serif",
                     fontSize: "12px",
@@ -534,6 +626,8 @@ export default function RoomDetailPage() {
                     textTransform: "uppercase",
                     cursor: "pointer",
                     transition: "all 0.3s ease",
+                    width: "100%",
+                    maxWidth: "200px",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = "#4a3a2a";
@@ -572,13 +666,13 @@ export default function RoomDetailPage() {
                 </div>
 
                 {/* Calendar and Breakfast Row - Professional Design */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                <div className="calendar-breakfast-grid">
                   {/* Calendar Section - Impressive Design */}
                   <div style={{
                     background: "linear-gradient(145deg, #ffffff 0%, #f8f6f3 100%)",
                     border: "1px solid rgba(179,153,119,0.2)",
                     borderRadius: "16px",
-                    padding: "24px",
+                    padding: "clamp(16px, 3vw, 24px)",
                     boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
                     position: "relative",
                     overflow: "hidden",
@@ -722,7 +816,7 @@ export default function RoomDetailPage() {
                       style={{
                         width: "100%",
                         height: "100%",
-                        minHeight: "320px",
+                        minHeight: "280px",
                         objectFit: "cover",
                         display: "block",
                         transition: "all 0.8s ease-in-out",
@@ -817,13 +911,13 @@ export default function RoomDetailPage() {
               </div>
 
               {/* Right Column: Room Facilities & Compare Prices */}
-              <div>
+              <div className="right-column">
                 {/* Room Facilities Section */}
                 <div style={{
                   background: "linear-gradient(180deg, rgba(217,219,237,0.75) 0%, rgba(237,230,217,1) 54%, rgba(237,230,217,0.5) 100%)",
                   border: "1px solid #e5e0d8",
                   borderRadius: "12px",
-                  padding: "24px",
+                  padding: "clamp(16px, 3vw, 24px)",
                   marginBottom: "20px",
                 }}>
                   <h3
@@ -838,7 +932,7 @@ export default function RoomDetailPage() {
                   >
                     Room Facilities
                   </h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <div className="facilities-grid">
                     {[
                       { icon: "ac", label: "Air Condition", sublabel: "Cool Comfort" },
                       { icon: "wifi", label: "Speed Wifi", sublabel: "High-Speed WiFi" },
@@ -877,7 +971,7 @@ export default function RoomDetailPage() {
                   backgroundColor: "#fff",
                   border: "1px solid #e5e0d8",
                   borderRadius: "12px",
-                  padding: "24px",
+                  padding: "clamp(16px, 3vw, 24px)",
                 }}>
                   <h3
                     style={{
@@ -964,7 +1058,7 @@ export default function RoomDetailPage() {
             </div>
 
             {/* Description Section */}
-            <div style={{ marginTop: "60px", paddingTop: "40px", borderTop: "1px solid rgba(0,0,0,0.1)" }}>
+            <div style={{ marginTop: "clamp(32px, 5vw, 60px)", paddingTop: "clamp(24px, 4vw, 40px)", borderTop: "1px solid rgba(0,0,0,0.1)" }}>
               <h2
                 style={{
                   fontFamily: "var(--font-playfair), serif",
