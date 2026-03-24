@@ -5,9 +5,9 @@ import Link from "next/link";
 const NAV_ITEMS: { label: string; href: string }[] = [
   { label: "ROOMS & SUITES", href: "/rooms-and-suites" },
   { label: "SERVICES",       href: "#services" },
-  { label: "TOURS",          href: "#tours" },
+  { label: "TOURS",          href: "/tours" },
   { label: "PACKAGES",       href: "#packages" },
-  { label: "GALLERY",        href: "#gallery" },
+  { label: "GALLERY",        href: "/gallery" },
 ];
 
 const IMAGE_FRAMES = [
