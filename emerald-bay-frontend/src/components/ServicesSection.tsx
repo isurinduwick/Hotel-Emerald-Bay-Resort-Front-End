@@ -104,6 +104,12 @@ export default function ServicesSection() {
           max-width: 320px;
         }
         @media (max-width: 768px) {
+          .white-triangle {
+            top: -30px !important;
+            border-left-width: 50px !important;
+            border-right-width: 50px !important;
+            border-top-width: 85px !important;
+          }
           .facility-card {
             width: calc(50% - 10px) !important;
             padding: 16px 8px 14px !important;
@@ -120,6 +126,12 @@ export default function ServicesSection() {
           }
         }
         @media (max-width: 480px) {
+          .white-triangle {
+            top: -35px !important;
+            border-left-width: 45px !important;
+            border-right-width: 45px !important;
+            border-top-width: 75px !important;
+          }
           .facility-card {
             width: calc(50% - 8px) !important;
             padding: 12px 6px 10px !important;
@@ -154,6 +166,7 @@ export default function ServicesSection() {
 
         {/* White triangle */}
         <div
+          className="white-triangle"
           style={{
             position: "absolute",
             top: 0,
