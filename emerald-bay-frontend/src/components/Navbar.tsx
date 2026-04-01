@@ -1,17 +1,49 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "About us", href: "#about-us" },
-  { label: "Contact us", href: "#contact-us" },
+  { label: "Home", targetId: "home" },
+  { label: "About us", targetId: "about-us" },
+  { label: "Contact us", targetId: "contact-us" },
 ];
+
+const NAVBAR_OFFSET = 72;
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const scrollToSection = (targetId: string, smooth = true) => {
+    if (targetId === "home") {
+      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+      return;
+    }
+
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    const top = target.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+    window.scrollTo({ top: Math.max(top, 0), behavior: smooth ? "smooth" : "auto" });
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    setMenuOpen(false);
+
+    if (pathname !== "/") {
+      router.push(targetId === "home" ? "/" : `/#${targetId}`);
+      return;
+    }
+
+    scrollToSection(targetId);
+    const nextPath = targetId === "home" ? "/" : `/#${targetId}`;
+    window.history.replaceState(null, "", nextPath);
+  };
 
   /* Close menu on outside click */
   useEffect(() => {
@@ -36,6 +68,20 @@ export default function Navbar() {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  /* Apply hash-based scroll after route changes (e.g. from subpages) */
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) return;
+
+    const timer = window.setTimeout(() => {
+      scrollToSection(decodeURIComponent(hash), true);
+    }, 60);
+
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
 
   return (
     <>
@@ -129,10 +175,11 @@ export default function Navbar() {
             className="desktop-nav-links"
             style={{ display: "flex", alignItems: "center", gap: "clamp(20px, 3vw, 40px)" }}
           >
-            {NAV_LINKS.map(({ label, href }) => (
+            {NAV_LINKS.map(({ label, targetId }) => (
               <a
                 key={label}
-                href={href}
+                href={targetId === "home" ? "/" : `/#${targetId}`}
+                onClick={(e) => handleNavClick(e, targetId)}
                 style={{
                   color: "rgba(30,30,30,0.85)",
                   fontSize: "14px",
@@ -274,11 +321,11 @@ export default function Navbar() {
           style={{ backgroundColor: "#EDE6D9", borderTop: "1px solid rgba(179,153,119,0.25)" }}
         >
           <div style={{ padding: "16px clamp(16px, 4vw, 32px) 24px" }}>
-            {NAV_LINKS.map(({ label, href }, i) => (
+            {NAV_LINKS.map(({ label, targetId }, i) => (
               <a
                 key={label}
-                href={href}
-                onClick={() => setMenuOpen(false)}
+                href={targetId === "home" ? "/" : `/#${targetId}`}
+                onClick={(e) => handleNavClick(e, targetId)}
                 style={{
                   display: "block",
                   padding: "14px 0",

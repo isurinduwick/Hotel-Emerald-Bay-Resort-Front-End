@@ -17,17 +17,21 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-white font-sans overflow-x-hidden">
       <LaundryPopup />
       <Navbar />
-      <main className="flex flex-1 w-full flex-col mt-[60px]">
+      <main id="home" className="flex flex-1 w-full flex-col mt-[60px]">
         <HeroSection />
-        <WelcomeSection />
+        <div id="about-us">
+          <WelcomeSection />
+        </div>
         <ServicesSection />
         <PerfectStaySection />
-        <ServiceSectionNew/>
+        <ServiceSectionNew />
         <ToursGuideSection />
         <PackagesSection />
         <DiscoverBeautySection />
         <DiscoverAwaitsSection />
-        <LocationSection />
+        <div id="contact-us">
+          <LocationSection />
+        </div>
       </main>
       <Footer />
     </div>
