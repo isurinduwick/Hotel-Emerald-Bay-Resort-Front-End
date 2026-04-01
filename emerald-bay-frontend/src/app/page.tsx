@@ -24,7 +24,7 @@ export default function Home() {
         </div>
         <ServicesSection />
         <PerfectStaySection />
-        <ServiceSectionNew/>
+        <ServiceSectionNew />
         <ToursGuideSection />
         <PackagesSection />
         <DiscoverBeautySection />
