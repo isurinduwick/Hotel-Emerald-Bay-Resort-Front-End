@@ -101,9 +101,20 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: [
+      { url: "/logo.png", type: "image/png", sizes: "any" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+    ],
+    apple: [{ url: "/logo.png", sizes: "180x180" }],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/logo.png",
+        sizes: "180x180",
+      },
+    ],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
