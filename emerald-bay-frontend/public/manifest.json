@@ -1,75 +1,78 @@
 {
-  "name": "Emerald Bay Resort Mirissa",
-  "short_name": "Emerald Bay Resort",
-  "description": "Beachfront resort in Mirissa with modern rooms, curated tours, premium amenities, and direct access to Sri Lanka's southern coast.",
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#B39977",
-  "background_color": "#EDE6D9",
-  "icons": [
-    {
-      "src": "/logo.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/logo.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/edited.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/edited.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
-  ],
-  "categories": ["travel", "hospitality"],
-  "shortcuts": [
-    {
-      "name": "Rooms & Suites",
-      "url": "/rooms-and-suites",
-      "icons": [
+    "name": "Emerald Bay Resort Mirissa",
+    "short_name": "Emerald Bay Resort",
+    "description": "Beachfront resort in Mirissa with modern rooms, curated tours, premium amenities, and direct access to Sri Lanka's southern coast.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#B39977",
+    "background_color": "#EDE6D9",
+    "icons": [
         {
-          "src": "/roomimg1.jpg",
-          "sizes": "96x96",
-          "type": "image/jpeg"
-        }
-      ]
-    },
-    {
-      "name": "Gallery",
-      "url": "/gallery",
-      "icons": [
+            "src": "/logo.png",
+            "sizes": "any",
+            "type": "image/png",
+            "purpose": "any"
+        },
         {
-          "src": "/istimg.jpg",
-          "sizes": "96x96",
-          "type": "image/jpeg"
+            "src": "/logo.png",
+            "sizes": "any",
+            "type": "image/png",
+            "purpose": "maskable"
         }
-      ]
-    },
-    {
-      "name": "Tours",
-      "url": "/tours",
-      "icons": [
+    ],
+    "screenshots": [
         {
-          "src": "/safariimg.jpg",
-          "sizes": "96x96",
-          "type": "image/jpeg"
+            "src": "/edited.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/edited.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
         }
-      ]
-    }
-  ]
+    ],
+    "categories": [
+        "travel",
+        "hospitality"
+    ],
+    "shortcuts": [
+        {
+            "name": "Rooms & Suites",
+            "url": "/rooms-and-suites",
+            "icons": [
+                {
+                    "src": "/roomimg1.jpg",
+                    "sizes": "96x96",
+                    "type": "image/jpeg"
+                }
+            ]
+        },
+        {
+            "name": "Gallery",
+            "url": "/gallery",
+            "icons": [
+                {
+                    "src": "/istimg.jpg",
+                    "sizes": "96x96",
+                    "type": "image/jpeg"
+                }
+            ]
+        },
+        {
+            "name": "Tours",
+            "url": "/tours",
+            "icons": [
+                {
+                    "src": "/safariimg.jpg",
+                    "sizes": "96x96",
+                    "type": "image/jpeg"
+                }
+            ]
+        }
+    ]
 }
