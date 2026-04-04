@@ -101,19 +101,10 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/logo.png", type: "image/png", sizes: "any" },
-      { url: "/favicon.ico", type: "image/x-icon" },
-    ],
-    apple: [{ url: "/logo.png", sizes: "180x180" }],
-    other: [
-      {
-        rel: "apple-touch-icon-precomposed",
-        url: "/logo.png",
-        sizes: "180x180",
-      },
-    ],
-  },
+  icon: "/favicon.ico",
+  shortcut: "/favicon.ico",
+  apple: "/logo.png",
+},
   manifest: "/manifest.json",
 };
 
